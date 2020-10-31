@@ -26,8 +26,14 @@ namespace WebKitchenBuilder
         {
             app.UseFileServer();
             app.UseMvc();
+
+            app.UseRouting();
+            app.UseEndpoints(routes =>
+            {
+                routes.MapHub<Controllers.DesignAutomationHub>("/api/signalr/designautomation");
+            });
+
         }
 
     }
-}
 }

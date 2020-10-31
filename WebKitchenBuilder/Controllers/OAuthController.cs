@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Autodesk.Forge;
 
-namespace forgeSample.Controllers
+namespace WebKitchenBuilder.Controllers
 {
     [ApiController]
     public class OAuthController : ControllerBase
@@ -16,6 +16,8 @@ namespace forgeSample.Controllers
         // them after the expires_in time (in seconds)
         private static dynamic InternalToken { get; set; }
 
+        [HttpGet]
+        [Route("api/forge/oauth/token")]
         /// <summary>
         /// Get access token with internal (write) scope
         /// </summary>

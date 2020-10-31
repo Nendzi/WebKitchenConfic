@@ -21,9 +21,8 @@ using Autodesk.Forge.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using forgeSample.Controllers;
 
-namespace forgesample.Controllers
+namespace WebKitchenBuilder.Controllers
 {
     [ApiController]
     public class ModelDerivativeController : ControllerBase

@@ -18,8 +18,7 @@
 
 using Autodesk.Forge;
 using Autodesk.Forge.Model;
-using forgesample.Models;
-using forgeSample.Controllers;
+using WebKitchenBuilder.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace forgesample.Controllers
+namespace WebKitchenBuilder.Controllers
 {
     [ApiController]
     public partial class OSSController : ControllerBase
