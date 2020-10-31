@@ -15,22 +15,15 @@
     <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
     <!-- this project files -->
     <link href="css/main.css" rel="stylesheet" />
-    <script src="js/ForgeTree.js"></script>
-    <script src="js/ForgeViewer.js"></script>
+    <!-- JavaScript files for this project -->
+    <script src="/js/ForgeTree.js"></script>
+    <script src="/js/ForgeViewer.js"></script>
+    <script src="/js/ForgeDesignAutomation.js"></script>
     <script src="/js/myawesomeextension.js"></script>
     <script src="/js/script3.js"></script>
-    <!--
-    <script src="/js/handleselectionextension.js"></script>
-    <script src="/js/modelsummaryextension.js"></script>
-    <!-- dashboard files
-    <script src="js/Dashboard/Dashboard.js"></script>
-    <script src="js/Dashboard/DashboardPanel.js"></script>
-    <!--Chart JS  packages
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
-    <script src="js/Dashboard/PanelBarChart.js"></script>
-    <script src="js/Dashboard/PanelPieChart.js"></script>-->
-
+    <!-- .NET SignalR -->
+    <script src="//unpkg.com/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script>
+    
 </head>
 <body>
     <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
@@ -115,7 +108,7 @@
                                 <p id="poruka2">Invalid input, overflow of 100%</p>
                                 <p id="proba"></p>
                                 <!--onclick: Nenina funkcija-->
-                                <button type="submit" id="prosledi" class="neaktivna" disabled>Submit</button>
+                                <button type="button" id="startWorkitem" class="neaktivna" disabled>Submit</button>
                                 <!--onclick: dodaj funkcija - dodaje novi HTML-->
                                 <button type="button" id="nova" class="neaktivna" disabled>Add new</button>
                             </fieldset>

@@ -19,6 +19,7 @@
 using Autodesk.Forge;
 using Autodesk.Forge.Model;
 using forgesample.Models;
+using forgeSample.Controllers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

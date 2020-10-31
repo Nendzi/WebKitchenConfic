@@ -54,7 +54,7 @@ namespace forgeSample.Controllers
         /// Prefix for AppBundles and Activities
         public static string NickName { get { return OAuthController.GetAppSetting("FORGE_CLIENT_ID"); } }
         /// Alias for the app (e.g. DEV, STG, PROD). This value may come from an environment variable
-        public static string Alias { get { return "dev"; } }
+        public static string Alias { get { return "alpha"; } }
         // Design Automation v3 API
         DesignAutomationClient _designAutomation;
 
@@ -91,8 +91,8 @@ namespace forgeSample.Controllers
         public async Task<IActionResult> CreateActivity([FromBody] JObject activitySpecs)
         {
             // basic input validation
-            string zipFileName = activitySpecs["zipFileName"].Value<string>();
-            string engineName = activitySpecs["engine"].Value<string>();
+            string zipFileName = "KitchenConfig.bundle"; //activitySpecs["zipFileName"].Value<string>();
+            string engineName = "Autodesk.Inventor+2021";//activitySpecs["engine"].Value<string>();
 
             // standard name for this sample
             string appBundleName = zipFileName + "AppBundle";
@@ -115,13 +115,9 @@ namespace forgeSample.Controllers
                     Engine = engineName,
                     Parameters = new Dictionary<string, Parameter>()
                     {
-                        { "inputFile", new Parameter() { Description = "input file", LocalName = "$(inputFile)", Ondemand = false, Required = true, Verb = Verb.Get, Zip = false } },
-                        { "inputJson", new Parameter() { Description = "input json", LocalName = "params.json", Ondemand = false, Required = false, Verb = Verb.Get, Zip = false } },
-                        { "outputFile", new Parameter() { Description = "output file", LocalName = "outputFile." + engineAttributes.extension, Ondemand = false, Required = true, Verb = Verb.Put, Zip = false } }
-                    },
-                    Settings = new Dictionary<string, ISetting>()
-                    {
-                        { "script", new StringSetting(){ Value = engineAttributes.script } }
+                        { "inputFile", new Parameter() { Description = "input file", LocalName = "$(inputFile)", Verb = Verb.Get, Zip = true } },
+                        { "inputJson", new Parameter() { Description = "input json", LocalName = "params.json",  Verb = Verb.Get, Zip = false } },
+                        { "outputFile", new Parameter() { Description = "output file", LocalName = @"Kitchen\Result", Verb = Verb.Put, Zip = true } }
                     }
                 };
                 Activity newActivity = await _designAutomation.CreateActivityAsync(activitySpec);
@@ -143,11 +139,7 @@ namespace forgeSample.Controllers
         /// </summary>
         private dynamic EngineAttributes(string engine)
         {
-            if (engine.Contains("3dsMax")) return new { commandLine = "$(engine.path)\\3dsmaxbatch.exe -sceneFile \"$(args[inputFile].path)\" $(settings[script].path)", extension = "max", script = "da = dotNetClass(\"Autodesk.Forge.Sample.DesignAutomation.Max.RuntimeExecute\")\nda.ModifyWindowWidthHeight()\n" };
-            if (engine.Contains("AutoCAD")) return new { commandLine = "$(engine.path)\\accoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\" /s $(settings[script].path)", extension = "dwg", script = "UpdateParam\n" };
-            if (engine.Contains("Inventor")) return new { commandLine = "$(engine.path)\\inventorcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\"", extension = "ipt", script = string.Empty };
-            if (engine.Contains("Revit")) return new { commandLine = "$(engine.path)\\revitcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\"", extension = "rvt", script = string.Empty };
-            throw new Exception("Invalid engine");
+            return new { commandLine = "$(engine.path)\\inventorcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\" \"$(args[inputJson].path)\"" };
         }
 
         /// <summary>
@@ -158,8 +150,8 @@ namespace forgeSample.Controllers
         public async Task<IActionResult> CreateAppBundle([FromBody] JObject appBundleSpecs)
         {
             // basic input validation
-            string zipFileName = appBundleSpecs["zipFileName"].Value<string>();
-            string engineName = appBundleSpecs["engine"].Value<string>();
+            string zipFileName = "KitchenConfig.bundle"; //appBundleSpecs["zipFileName"].Value<string>();
+            string engineName = "Autodesk.Inventor+2021";// appBundleSpecs["engine"].Value<string>();
 
             // standard name for this sample
             string appBundleName = zipFileName + "AppBundle";
@@ -247,7 +239,8 @@ namespace forgeSample.Controllers
             string browerConnectionId = workItemData["browerConnectionId"].Value<string>();
 
             // save the file on the server
-            var fileSavePath = Path.Combine(_env.ContentRootPath, Path.GetFileName(input.inputFile.FileName));
+            string inputDataSet = Path.Combine(_env.WebRootPath, @"\InputFiles\Kitchen.zip");
+            var fileSavePath = Path.Combine(_env.ContentRootPath, inputDataSet); //Path.GetFileName(input.inputFile.FileName)
             using (var stream = new FileStream(fileSavePath, FileMode.Create)) await input.inputFile.CopyToAsync(stream);
 
             // OAuth token
@@ -265,7 +258,7 @@ namespace forgeSample.Controllers
             }
             catch { }; // in case bucket already exists
                        // 2. upload inputFile
-            string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), Path.GetFileName(input.inputFile.FileName)); // avoid overriding
+            string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "KitchenElement.zip" ); // avoid overriding Path.GetFileName(input.inputFile.FileName)
             ObjectsApi objects = new ObjectsApi();
             objects.Configuration.AccessToken = oauth.access_token;
             using (StreamReader streamReader = new StreamReader(fileSavePath))
@@ -346,7 +339,7 @@ namespace forgeSample.Controllers
                 dynamic signedUrl = await objectsApi.CreateSignedResourceAsyncWithHttpInfo(NickName.ToLower() + "-designautomation", outputFileName, new PostBucketsSigned(10), "read");
                 await _hubContext.Clients.Client(id).SendAsync("downloadResult", (string)(signedUrl.Data.signedUrl));
             }
-            catch (Exception e) { }
+            catch (Exception) { }
 
             // ALWAYS return ok (200)
             return Ok();

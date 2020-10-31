@@ -27,43 +27,34 @@ function proveraFunkcija(event, objProvera) {
     }
     else if (tipka == 8) {
         document.getElementById("poruka").style.display = "none";
-        dodajAktivno();
-        
+        dodajAktivno();        
     }
     else {
        document.getElementById("poruka").style.display = "block";
         dodajNeAktivno();
         proslediNeAktivno();
-       /*console.log(objProvera.id);
-       console.log(objProvera);*/
          
         /*briše staro polje _(celo) i dodaje novo polje*/ 
-       var polje = document.getElementById(objProvera.id).parentNode;
+        var polje = document.getElementById(objProvera.id).parentNode;
         polje.innerHTML += document.getElementById(objProvera.id).innerHTML;
         /*ponovo izračunati procente*/
-     /* NAĆI ZAŠTO NE RAČUNA OSTATAK SA SVIM POLJIMA*/
+        /* NAĆI ZAŠTO NE RAČUNA OSTATAK SA SVIM POLJIMA*/
          
         var ar = ostatakIzračunavanje()[2];
-         var dar = ar.length;
+        var dar = ar.length;
         ispravljeniOstatak();
-         /*console.log(dar);*/
-         var količnik = ispravljeniOstatak()[0];
-        
-             console.log(količnik);
-             for (let ind = 0; ind < dar; ind++) {
-                 document.getElementsByClassName("percentum")[ind].setAttribute("placeholder", "Prostalo je " + količnik.toPrecision(4) + "%");
-             }
+        var količnik = ispravljeniOstatak()[0];
+        for (let ind = 0; ind < dar; ind++) {
+            document.getElementsByClassName("percentum")[ind].setAttribute("placeholder", "Prostalo je " + količnik.toPrecision(4) + "%");
+        }
 
-             var suma = ostatakIzračunavanje()[1];
-             console.log(suma);
-             if (suma == 100 || suma < 100) {
-                 document.getElementById("poruka2").style.display = "none";
-             }
-             else if (suma > 100) {
-                 document.getElementById("poruka2").style.display = "block";
-             }
-        /*console.log(polje);*/
-       console.log(polje.innerHTML);
+        var suma = ostatakIzračunavanje()[1];
+        if (suma == 100 || suma < 100) {
+        document.getElementById("poruka2").style.display = "none";
+        }
+        else if (suma > 100) {
+        document.getElementById("poruka2").style.display = "block";
+        }
     }
 }  
 /*promena aktivnosti dugmića prosledi i dodaj*/
@@ -78,12 +69,12 @@ function dodajNeAktivno() {
     nov.className = "neaktivna"
 }
 function proslediAktivno() {
-    var pros = document.getElementById("prosledi");
+    var pros = document.getElementById("startWorkitem");
     pros.disabled = false;
     pros.className = "aktivna";
 }
 function proslediNeAktivno() {
-    var pros = document.getElementById("prosledi");
+    var pros = document.getElementById("startWorkitem");
     pros.disabled = true;
     pros.className = "neaktivna";
 }
@@ -125,10 +116,6 @@ function ostatakIzračunavanje() {
         suma += a;
         ostatak = 100 - suma;
     }
-    console.log(a);
-    console.log(d);
-    console.log(suma);
-    console.log(ar);
     return izlaz = [ostatak, suma, ar];
 }
 function naUnos(objUnos) {
@@ -163,9 +150,6 @@ function naUnos(objUnos) {
     }
     else if (dniz < dar || cBroj == 0) {
         var količnik = ispravljeniOstatak()[0];
-        console.log(količnik);
-        console.log(suma);
-        
         
         for (let ind = 0; ind < dar; ind++) {
             document.getElementsByClassName("percentum")[ind].setAttribute("placeholder", "Left " + količnik.toPrecision(4) + "%");
@@ -180,7 +164,6 @@ function naUnos(objUnos) {
     }
     /*ako se unese više od 100%*/
     else if (suma > 100) {
-        console.log(suma);
         document.getElementById("poruka2").style.display = "block";
         proslediNeAktivno();
         dodajNeAktivno();
@@ -190,8 +173,7 @@ function naUnos(objUnos) {
         document.getElementById("poruka2").style.display = "none";
         /*upisuje ostatak u polje nakon prepravke, kad se prekoračilo 100%*/
         objUnos.setAttribute("placeholder", "Left " + ost + "%");
-    }
-    
+    }    
 }
 /*funkcija za dodavanje HTML*/
 function dodajFunkcija() {
@@ -267,5 +249,5 @@ function obrisatiFunkcija(objBrisanje) {
 /*dodaj eventListener na dugme za unos i prosleđivanje*/
 
 
-/*document.getElementById("prosledi").addEventListener("click", neninaFunkcija);*/
+/*document.getElementById("startWorkitem").addEventListener("click", neninaFunkcija);*/
 
