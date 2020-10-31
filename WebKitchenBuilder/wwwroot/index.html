@@ -17,6 +17,20 @@
     <link href="css/main.css" rel="stylesheet" />
     <script src="js/ForgeTree.js"></script>
     <script src="js/ForgeViewer.js"></script>
+    <script src="/js/myawesomeextension.js"></script>
+    <script src="/js/script3.js"></script>
+    <!--
+    <script src="/js/handleselectionextension.js"></script>
+    <script src="/js/modelsummaryextension.js"></script>
+    <!-- dashboard files
+    <script src="js/Dashboard/Dashboard.js"></script>
+    <script src="js/Dashboard/DashboardPanel.js"></script>
+    <!--Chart JS  packages
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+    <script src="js/Dashboard/PanelBarChart.js"></script>
+    <script src="js/Dashboard/PanelPieChart.js"></script>-->
+
 </head>
 <body>
     <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
@@ -24,9 +38,21 @@
         <div class="container-fluid">
             <ul class="nav navbar-nav left">
                 <li>
-                    <a href="http://developer.autodesk.com" target="_blank">
-                        <img alt="Autodesk Forge" src="//developer.static.autodesk.com/images/logo_forge-2-line.png" height="20">
+                    <a href="https://www.teamcad.rs/" target="_blank">
+                        <img alt="TeamCAD Serbia" src="https://www.teamcad.rs/images/Logo/LOGO_TeamCAD_logo.png" height="50">
                     </a>
+                </li>
+                <li class="navClient">
+                    Forge client ID
+                </li>
+                <li>
+                    <input type="text" class="navTextArea" id="client_id" placeholder="Input your forge App ID" />
+                </li>
+                <li class="navClient">
+                    Frge client secret
+                </li>
+                <li>
+                    <input type="password" class="navTextArea" id="client_secret" placeholder="Input your forge App secret" />
                 </li>
             </ul>
         </div>
@@ -34,21 +60,70 @@
     <!-- End of navbar -->
     <div class="container-fluid fill">
         <div class="row fill">
-            <div class="col-sm-4 fill">
+            <div class="col-sm-3 fill">
                 <div class="panel panel-default fill">
                     <div class="panel-heading" data-toggle="tooltip">
                         Buckets &amp; Objects
                         <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
+                        <!-- Ovo hoću da izbacim ali kad sve proradi
                         <button class="btn btn-xs btn-info" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
                             <span class="glyphicon glyphicon-folder-close"></span> New bucket
                         </button>
+                            -->
                     </div>
                     <div id="appBuckets">
-                        tree here
+                        Tree here
+                    </div>
+                    <div id="selektor">
+                        <!--Ivanin kod ne krivite mene-->
+                        <form action="#" method="POST" id="elForma">
+                            <fieldset class="grupa">
+                                <legend class="naziv">Element configurator</legend>
+                                <input id="elementWidth" type="text" placeholder="Width in mm" />
+                                <input id="elementHeight" type="text" placeholder="Height in mm" />
+                                <div id="podela" class="razdela">
+                                    <div class="selekcija">
+                                        <label for="elementi">Choose front type:</label>
+                                        <div>
+                                            <select name="elementi" id="elementi" class="odabir">
+                                                <option value="closed">Closed</option>
+                                                <option value="open">Open</option>
+                                                <option value="drawer">Drawer</option>
+                                                <option value="doublDoor">Double door</option>
+                                                <option value="leftDoor">Left door</option>
+                                                <option value="rightdoor">Right door</option>
+                                                <option value="cassette">Cassette</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="broj">
+                                        <label for="procenti">Element heigth [%]:</label>
+                                        <div class="teksterija">
+                                            <!--oninput: izmena funkcija - menja aktivno/neaktivno stanje dugmeta-->
+                                            <textarea class="percentum" id="procenti" name="unos" placeholder="Left 100%" onkeydown="proveraFunkcija(event, this)" oninput="naUnos(this)"></textarea>
+                                            <div class="brisanje">
+                                                <!--u prvom učitavanju ne treba dugme za brisanje-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--mesto gde se dodaje novi deo forme-->
+                                <div id="dodatak1"></div>
+                                <p id="poruka">Input procentage</p>
+                                <p id="poruka2">Invalid input, overflow of 100%</p>
+                                <p id="proba"></p>
+                                <!--onclick: Nenina funkcija-->
+                                <button type="submit" id="prosledi" class="neaktivna" disabled>Submit</button>
+                                <!--onclick: dodaj funkcija - dodaje novi HTML-->
+                                <button type="button" id="nova" class="neaktivna" disabled>Add new</button>
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8 fill">
+            <div class="col-sm-9 fill">
                 <div id="forgeViewer"></div>
             </div>
         </div>
@@ -56,28 +131,30 @@
     <form id="uploadFile" method='post' enctype="multipart/form-data">
         <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden" />
     </form>
-    <!-- Modal Create Bucket -->
-    <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">Create new bucket</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="newBucketKey" class="form-control"> For demonstration purposes, objects (files) are
-                    NOT automatically translated. After you upload, right click on
-                    the object and select "Translate". Bucket keys must be of the form [-_.a-z0-9]{3,128}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="createNewBucket">Go ahead, create the bucket</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script> launchViewer() </script>
+
+    <!-- Ovo hoću da obrišem kad sve proradi
+    Modal Create Bucket
+     <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                     <h4 class="modal-title" id="myModalLabel">Create new bucket</h4>
+                 </div>
+                 <div class="modal-body">
+                     <input type="text" id="newBucketKey" class="form-control"> For demonstration purposes, objects (files) are
+                     NOT automatically translated. After you upload, right click on
+                     the object and select "Translate". Bucket keys must be of the form [-_.a-z0-9]{3,128}
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                     <button type="button" class="btn btn-primary" id="createNewBucket">Go ahead, create the bucket</button>
+                 </div>
+             </div>
+         </div>
+     </div>
+     -->
 </body>
 </html>
