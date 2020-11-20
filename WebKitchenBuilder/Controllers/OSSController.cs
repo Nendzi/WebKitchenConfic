@@ -28,12 +28,15 @@ using System.Threading.Tasks;
 
 namespace WebKitchenBuilder.Controllers
 {
+
     [ApiController]
     public partial class OSSController : ControllerBase
     {
         private IWebHostEnvironment _env;
         public OSSController(IWebHostEnvironment env) { _env = env; }
         public string ClientId { get { return OAuthController.GetAppSetting("FORGE_CLIENT_ID").ToLower(); } }
+        // BucketName
+        public string BucketName { get { return "kitchenconfig"; } }
 
         /// <summary>
         /// Return list of buckets (id=#) or list of objects (id=bucketKey)
@@ -56,7 +59,7 @@ namespace WebKitchenBuilder.Controllers
                 foreach (KeyValuePair<string, dynamic> bucket in new DynamicDictionaryItems(buckets.items))
                 {
                     string actualBucket = bucket.Value.bucketKey;
-                    if (actualBucket.Contains("kitchenconfig")) //kitchenconfig  designautomation
+                    if (actualBucket.Contains(BucketName)) //kitchenconfig  designautomation
                     {
                         nodes.Add(new TreeNode(bucket.Value.bucketKey, bucket.Value.bucketKey.Replace(ClientId + "-", string.Empty), "bucket", true));
                     }
@@ -72,7 +75,7 @@ namespace WebKitchenBuilder.Controllers
                 {
                     string fileName = objInfo.Value.objectKey;
                     fileName.ToLower();
-                    if (fileName.Contains("zip") && fileName.Contains("result")) //result output
+                    if (fileName.Contains("zip") && fileName.Contains("output")) //result output
                     {
                         nodes.Add(new TreeNode(Base64Encode((string)objInfo.Value.objectId),
                         objInfo.Value.objectKey, "zipfile", false));

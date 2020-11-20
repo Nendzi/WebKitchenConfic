@@ -17,35 +17,17 @@
 /////////////////////////////////////////////////////////////////////
 
 $(document).ready(function () {
-    //prepareLists();
-    //$('#clearAccount').click(clearAccount);
-    //$('#defineActivityShow').click(defineActivityModal);
-    //$('#createAppBundleActivity').click(createAppBundleActivity);
     $('#startWorkitem').click(startWorkitem);
 
-    startConnection();
-    createAppBundleActivity();
+    $("#forgeViewer").css("display", "block");
+    $("#outputWindow").css("display", "none");
 
+    startConnection();
+    prepareBucket();
+    createAppBundleActivity();
 });
 
-function prepareLists() {
-//    list('activity', '/api/forge/designautomation/activities');
-//    list('engines', '/api/forge/designautomation/engines');
-//    list('localBundles', '/api/appbundles');
-}
-
-//function list(control, endpoint) {
-//    $('#' + control).find('option').remove().end();
-//    jQuery.ajax({
-//        url: endpoint,
-//        success: function (list) {
-//            if (list.length === 0)
-//                $('#' + control).append($('<option>', { disabled: true, text: 'Nothing found' }));
-//            else
-//                list.forEach(function (item) { $('#' + control).append($('<option>', { value: item, text: item })); })
-//        }
-//    });
-//}
+function prepareLists() { }
 
 function clearAccount() {
     if (!confirm('Clear existing activities & appbundles before start. ' +
@@ -58,6 +40,20 @@ function clearAccount() {
         success: function () {
             prepareLists();
             writeLog('Account cleared, all appbundles & activities deleted');
+        }
+    });
+}
+
+function prepareBucket() {
+    writeLog("Preparing bucket");
+    jQuery.ajax({
+        url: 'api/forge/oss/buckets',
+        method: 'POST',
+        data: JSON.stringify({
+            bucketKey: 'kitchenconfig'
+        }),
+        success: function () {
+            writeLog('Bucket kitchenconfig is created')
         }
     });
 }
@@ -84,8 +80,8 @@ function createAppBundle(cb) {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-            zipFileName: 'KitchenConfig.bundle.zip', // $('#localBundles').val(),
-            engine: 'Autodesk.Inventor+2021' //$('#engines').val()
+            zipFileName: 'KitchenConfig.bundle.zip',
+            engine: 'Autodesk.Inventor+2021'
         }),
         success: function (res) {
             writeLog('AppBundle: ' + res.appBundle + ', v' + res.version);
@@ -101,8 +97,8 @@ function createActivity(cb) {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-            zipFileName: 'Kitchen.zip', //$('#localBundles').val(),
-            engine: 'Autodesk.Inventor+2021' //$('#engines').val()
+            zipFileName: 'Kitchen.zip',
+            engine: 'Autodesk.Inventor+2021'
         }),
         success: function (res) {
             writeLog('Activity: ' + res.activity);
@@ -112,22 +108,12 @@ function createActivity(cb) {
 }
 
 function startWorkitem() {
-    
-    //var inputFileField = document.getElementById('inputFile');
-    //if (inputFileField.files.length === 0) { alert('Please select an input file'); return; }
-    //if ($('#activity').val() === null) { alert('Please select an activity'); return };
-    //var file = inputFileField.files[0];
+    $("#forgeViewer").css("display", "none");
+    $("#outputWindow").css("display", "block");
     writeLog("Starting Workitem");
     startConnection(function () {
         var formData = new FormData();
-        //formData.append('inputFile', file);
         formData.append('data', collectKitchenStructure()
-            //JSON.stringify({
-            //width: $('#elementWidth').val(),
-            //height: $('#elementHeight').val(),
-            //activityName: 'KitchenConfig', // $('#activity').val(),
-            //browerConnectionId: connectionId
-        //})
     );
         writeLog('Uploading input file...');
         $.ajax({
@@ -139,8 +125,10 @@ function startWorkitem() {
             success: function (res) {
                 writeLog('Workitem started: ' + res.workItemId);
             }
-        });
+        });        
     });
+    $("#forgeViewer").css("display", "block");
+    $("#outputWindow").css("display", "none");
 }
 
 function writeLog(text) {
