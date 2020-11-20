@@ -56,9 +56,9 @@ namespace WebKitchenBuilder.Controllers
                 foreach (KeyValuePair<string, dynamic> bucket in new DynamicDictionaryItems(buckets.items))
                 {
                     string actualBucket = bucket.Value.bucketKey;
-                    if (actualBucket.Contains("kitchenconfig"))
+                    if (actualBucket.Contains("kitchenconfig")) //kitchenconfig  designautomation
                     {
-                        nodes.Add(new TreeNode(bucket.Value.bucketKey, bucket.Value.bucketKey.Replace(ClientId + "_", string.Empty), "bucket", true));
+                        nodes.Add(new TreeNode(bucket.Value.bucketKey, bucket.Value.bucketKey.Replace(ClientId + "-", string.Empty), "bucket", true));
                     }
                 }
             }
@@ -72,7 +72,7 @@ namespace WebKitchenBuilder.Controllers
                 {
                     string fileName = objInfo.Value.objectKey;
                     fileName.ToLower();
-                    if (fileName.Contains("zip") && fileName.Contains("result"))
+                    if (fileName.Contains("zip") && fileName.Contains("result")) //result output
                     {
                         nodes.Add(new TreeNode(Base64Encode((string)objInfo.Value.objectId),
                         objInfo.Value.objectKey, "zipfile", false));

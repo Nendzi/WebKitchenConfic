@@ -246,8 +246,27 @@ function obrisatiFunkcija(objBrisanje) {
         dodajNeAktivno();
     }
 }
-/*dodaj eventListener na dugme za unos i prosleđivanje*/
 
+function collectKitchenStructure() {
+    var elemHeigth = document.getElementsByClassName("percentum");
+    var elemType = document.getElementsByClassName("odabir");
 
-/*document.getElementById("startWorkitem").addEventListener("click", neninaFunkcija);*/
+    var elemHeigthValue = [];
+    var elemTypeValue = [];
 
+    for (var i = 0; i < elemHeigth.length; i++) {
+        elemHeigthValue[i] = elemHeigth[i].value;
+        elemTypeValue[i] = elemType[i].value;
+    }
+
+    var myJsonCollect = JSON.stringify({
+        width: $('#elementWidth').val(),
+        height: $('#elementHeight').val(),
+        ivyxType: elemTypeValue,
+        ivyxHeigth: elemHeigthValue,
+        activityName: 'KitchenConfig',
+        browerConnectionId: connectionId
+    });
+
+    return myJsonCollect;
+}

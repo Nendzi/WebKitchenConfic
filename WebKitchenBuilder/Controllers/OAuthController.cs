@@ -15,17 +15,36 @@ namespace WebKitchenBuilder.Controllers
         // cache them using static variables. Note we still need to refresh
         // them after the expires_in time (in seconds)
         private static dynamic InternalToken { get; set; }
+        private static dynamic PublicToken { get; set; }
 
-        [HttpGet]
-        [Route("api/forge/oauth/token")]
+
         /// <summary>
         /// Get access token with internal (write) scope
         /// </summary>
+        [HttpGet]
+        [Route("api/forge/oauth/token")]
+        public async Task<dynamic> GetPublicAsync()
+        {
+            if (PublicToken == null || PublicToken.ExpiresAt < DateTime.UtcNow)
+            {
+                PublicToken = await Get2LeggedTokenAsync(new Scope[] { Scope.ViewablesRead });
+                PublicToken.ExpiresAt = DateTime.UtcNow.AddSeconds(PublicToken.expires_in);
+            }
+            return PublicToken;
+        }
+
         public static async Task<dynamic> GetInternalAsync()
         {
             if (InternalToken == null || InternalToken.ExpiresAt < DateTime.UtcNow)
             {
-                InternalToken = await Get2LeggedTokenAsync(new Scope[] { Scope.BucketCreate, Scope.BucketRead, Scope.BucketDelete, Scope.DataRead, Scope.DataWrite, Scope.DataCreate, Scope.CodeAll });
+                InternalToken = await Get2LeggedTokenAsync(new Scope[] { 
+                    Scope.BucketCreate, 
+                    Scope.BucketRead, 
+                    Scope.BucketDelete, 
+                    Scope.DataRead, 
+                    Scope.DataWrite, 
+                    Scope.DataCreate, 
+                    Scope.CodeAll });
                 InternalToken.ExpiresAt = DateTime.UtcNow.AddSeconds(InternalToken.expires_in);
             }
 

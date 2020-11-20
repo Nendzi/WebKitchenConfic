@@ -17,7 +17,6 @@ namespace WebKitchenBuilder
             {
                 services.AddDesignAutomation(hostContext.Configuration);
             }).Build().Run();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

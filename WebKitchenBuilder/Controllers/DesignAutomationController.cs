@@ -50,6 +50,7 @@ namespace WebKitchenBuilder.Controllers
         private IHubContext<DesignAutomationHub> _hubContext;
         // Local folder for bundles
         public string LocalBundlesFolder { get { return Path.Combine(_env.WebRootPath, "bundles"); } }
+        public string LocalDataSetFolder { get { return Path.Combine(_env.WebRootPath, "InputFiles"); } }
         /// Prefix for AppBundles and Activities
         public static string NickName { get { return OAuthController.GetAppSetting("FORGE_CLIENT_ID"); } }
         /// Alias for the app (e.g. DEV, STG, PROD). This value may come from an environment variable
@@ -63,18 +64,6 @@ namespace WebKitchenBuilder.Controllers
             _designAutomation = api;
             _env = env;
             _hubContext = hubContext;
-        }
-
-        /// <summary>
-        /// Helps identify the engine
-        /// </summary>
-        private dynamic EngineAttributes(string engine)
-        {
-            if (engine.Contains("3dsMax")) return new { commandLine = "$(engine.path)\\3dsmaxbatch.exe -sceneFile \"$(args[inputFile].path)\" $(settings[script].path)", extension = "max", script = "da = dotNetClass(\"Autodesk.Forge.Sample.DesignAutomation.Max.RuntimeExecute\")\nda.ModifyWindowWidthHeight()\n" };
-            if (engine.Contains("AutoCAD")) return new { commandLine = "$(engine.path)\\accoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\" /s $(settings[script].path)", extension = "dwg", script = "UpdateParam\n" };
-            if (engine.Contains("Inventor")) return new { commandLine = "$(engine.path)\\inventorcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\"", extension = "ipt", script = string.Empty };
-            if (engine.Contains("Revit")) return new { commandLine = "$(engine.path)\\revitcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\"", extension = "rvt", script = string.Empty };
-            throw new Exception("Invalid engine");
         }
 
         /// <summary>
@@ -113,14 +102,14 @@ namespace WebKitchenBuilder.Controllers
         public async Task<IActionResult> CreateAppBundle([FromBody] JObject appBundleSpecs)
         {
             // basic input validation
-            string zipFileName = appBundleSpecs["zipFileName"].Value<string>();
-            string engineName = appBundleSpecs["engine"].Value<string>();
+            string zipFileName = "KitchenConfig.bundle.zip";// appBundleSpecs["zipFileName"].Value<string>();
+            string engineName = "Autodesk.Inventor+2021";// appBundleSpecs["engine"].Value<string>();
 
             // standard name for this sample
-            string appBundleName = zipFileName + "AppBundle";
+            string appBundleName = "KitchenConfig";
 
             // check if ZIP with bundle is here
-            string packageZipPath = Path.Combine(LocalBundlesFolder, zipFileName + ".zip");
+            string packageZipPath = Path.Combine(LocalBundlesFolder, zipFileName);
             if (!System.IO.File.Exists(packageZipPath)) throw new Exception("Appbundle not found at " + packageZipPath);
 
             // get defined app bundles
@@ -134,11 +123,10 @@ namespace WebKitchenBuilder.Controllers
                 // create an appbundle (version 1)
                 AppBundle appBundleSpec = new AppBundle()
                 {
-                    Package = appBundleName,
+                    Package = packageZipPath, //appBundleName,
                     Engine = engineName,
                     Id = appBundleName,
-                    Description = string.Format("Description for {0}", appBundleName),
-
+                    Description = "Creates an kitchen elements based on template files"
                 };
                 newAppVersion = await _designAutomation.CreateAppBundleAsync(appBundleSpec);
                 if (newAppVersion == null) throw new Exception("Cannot create new app");
@@ -179,6 +167,21 @@ namespace WebKitchenBuilder.Controllers
         }
 
         /// <summary>
+        /// Helps identify the engine
+        /// </summary>
+        private dynamic EngineAttributes(string engine)
+        {
+            if (engine.Contains("3dsMax")) return new { commandLine = "$(engine.path)\\3dsmaxbatch.exe -sceneFile \"$(args[inputFile].path)\" $(settings[script].path)", extension = "max", script = "da = dotNetClass(\"Autodesk.Forge.Sample.DesignAutomation.Max.RuntimeExecute\")\nda.ModifyWindowWidthHeight()\n" };
+            if (engine.Contains("AutoCAD")) return new { commandLine = "$(engine.path)\\accoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\" /s $(settings[script].path)", extension = "dwg", script = "UpdateParam\n" };
+            if (engine.Contains("Inventor")) return new
+            {
+                commandLine = "$(engine.path)\\inventorcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\" \"$(args[inputJson].path)\""
+            };
+            if (engine.Contains("Revit")) return new { commandLine = "$(engine.path)\\revitcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\"", extension = "rvt", script = string.Empty };
+            throw new Exception("Invalid engine");
+        }
+
+        /// <summary>
         /// Define a new activity
         /// </summary>
         [HttpPost]
@@ -186,12 +189,12 @@ namespace WebKitchenBuilder.Controllers
         public async Task<IActionResult> CreateActivity([FromBody] JObject activitySpecs)
         {
             // basic input validation
-            string zipFileName = activitySpecs["zipFileName"].Value<string>();
-            string engineName = activitySpecs["engine"].Value<string>();
+            string zipFileName = "KitchenConfig.bundle.zip";// activitySpecs["zipFileName"].Value<string>();
+            string engineName = "Autodesk.Inventor+2021";// activitySpecs["engine"].Value<string>();
 
             // standard name for this sample
-            string appBundleName = zipFileName + "AppBundle";
-            string activityName = zipFileName + "Activity";
+            string appBundleName = "KitchenConfig";//zipFileName + "AppBundle";
+            string activityName = "KitchenConfig";// zipFileName + "Activity";
 
             // 
             Page<string> activities = await _designAutomation.GetActivitiesAsync();
@@ -209,15 +212,26 @@ namespace WebKitchenBuilder.Controllers
                     CommandLine = new List<string>() { commandLine },
                     Engine = engineName,
                     Parameters = new Dictionary<string, Parameter>()
-            {
-                { "inputFile", new Parameter() { Description = "input file", LocalName = "$(inputFile)", Ondemand = false, Required = true, Verb = Verb.Get, Zip = false } },
-                { "inputJson", new Parameter() { Description = "input json", LocalName = "params.json", Ondemand = false, Required = false, Verb = Verb.Get, Zip = false } },
-                { "outputFile", new Parameter() { Description = "output file", LocalName = "outputFile." + engineAttributes.extension, Ondemand = false, Required = true, Verb = Verb.Put, Zip = false } }
-            },
-                    Settings = new Dictionary<string, ISetting>()
-            {
-                { "script", new StringSetting(){ Value = engineAttributes.script } }
-            }
+                    {
+                        { "inputFile", new Parameter(){
+                            Description = "IAM file to process",
+                            LocalName = "CleanSlate.iam",
+                            Verb = Verb.Get, 
+                            Zip = true }
+                        },
+                        { "inputJson", new Parameter() {
+                            Description = "JSON file with User Params", 
+                            LocalName = "params.json",
+                            Verb = Verb.Get, 
+                            Zip = false }
+                        },
+                        { "outputFile", new Parameter() {
+                            Description = "Resulting assembly", 
+                            LocalName = @"Kitchen\Result", 
+                            Verb = Verb.Put, 
+                            Zip = true }
+                        }
+                    }
                 };
                 Activity newActivity = await _designAutomation.CreateActivityAsync(activitySpec);
 
@@ -259,21 +273,21 @@ namespace WebKitchenBuilder.Controllers
         {
             // basic input validation
             JObject workItemData = JObject.Parse(input.data);
-            string widthParam = workItemData["width"].Value<string>();
-            string heigthParam = workItemData["height"].Value<string>();
-            string activityName = string.Format("{0}.{1}", NickName, workItemData["activityName"].Value<string>());
+            //string widthParam = workItemData["width"].Value<string>();
+            //string heigthParam = workItemData["height"].Value<string>();
+            string activityName = string.Format("{0}.{1}+{2}", NickName, workItemData["activityName"].Value<string>().ToLower(),Alias);
             string browerConnectionId = workItemData["browerConnectionId"].Value<string>();
 
             // save the file on the server
-            var fileSavePath = Path.Combine(_env.ContentRootPath, Path.GetFileName(input.inputFile.FileName));
-            using (var stream = new FileStream(fileSavePath, FileMode.Create)) await input.inputFile.CopyToAsync(stream);
+            var fileSavePath = Path.Combine(LocalDataSetFolder, "Kitchen.zip");
+            //using (var stream = new FileStream(fileSavePath, FileMode.Create)) await input.inputFile.CopyToAsync(stream);
 
             // OAuth token
             dynamic oauth = await OAuthController.GetInternalAsync();
 
             // upload file to OSS Bucket
             // 1. ensure bucket existis
-            string bucketKey = NickName.ToLower() + "-designautomation";
+            string bucketKey = NickName.ToLower() + "-kitchenconfig"; //kitchenconfig designautomation
             BucketsApi buckets = new BucketsApi();
             buckets.Configuration.AccessToken = oauth.access_token;
             try
@@ -283,46 +297,57 @@ namespace WebKitchenBuilder.Controllers
             }
             catch { }; // in case bucket already exists
                        // 2. upload inputFile
-            string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), Path.GetFileName(input.inputFile.FileName)); // avoid overriding
+            string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "Kitchen.zip"); // avoid overriding
             ObjectsApi objects = new ObjectsApi();
             objects.Configuration.AccessToken = oauth.access_token;
             using (StreamReader streamReader = new StreamReader(fileSavePath))
                 await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
-            System.IO.File.Delete(fileSavePath);// delete server copy
+            //System.IO.File.Delete(fileSavePath);// delete server copy
 
             // prepare workitem arguments
             // 1. input file
             XrefTreeArgument inputFileArgument = new XrefTreeArgument()
             {
+                Verb = Verb.Get,
+                LocalName = "Kitchen",
+                PathInZip = "CleanSlate.iam",
                 Url = string.Format("https://developer.api.autodesk.com/oss/v2/buckets/{0}/objects/{1}", bucketKey, inputFileNameOSS),
                 Headers = new Dictionary<string, string>()
-        {
-            { "Authorization", "Bearer " + oauth.access_token }
-        }
+                {
+                    { "Authorization", "Bearer " + oauth.access_token }
+                }
             };
-            // 2. input json
-            dynamic inputJson = new JObject();
-            inputJson.Width = widthParam;
-            inputJson.Height = heigthParam;
+            // 2a. input json from file
+            //string jsonPath = Path.Combine(LocalDataSetFolder, "params.json");
+            //JObject inputJson = JObject.Parse(System.IO.File.ReadAllText(jsonPath));
+            //string inputJsonStr = inputJson.ToString(Newtonsoft.Json.Formatting.None);
+
+            // 2b. input json from viewer
+            string inputJsonStr = workItemData.ToString(Newtonsoft.Json.Formatting.None).Replace("\"", "'");
             XrefTreeArgument inputJsonArgument = new XrefTreeArgument()
             {
-                Url = "data:application/json, " + ((JObject)inputJson).ToString(Formatting.None).Replace("\"", "'")
+                Verb = Verb.Get,
+                Url = "data:application/json, " + inputJsonStr
             };
             // 3. output file
-            string outputFileNameOSS = string.Format("{0}_output_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), Path.GetFileName(input.inputFile.FileName)); // avoid overriding
+            string outputFileNameOSS = string.Format("{0}_output_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "Kitchen.zip"); // avoid overriding
             XrefTreeArgument outputFileArgument = new XrefTreeArgument()
             {
                 Url = string.Format("https://developer.api.autodesk.com/oss/v2/buckets/{0}/objects/{1}", bucketKey, outputFileNameOSS),
                 Verb = Verb.Put,
                 Headers = new Dictionary<string, string>()
-            {
-                {"Authorization", "Bearer " + oauth.access_token }
-            }
+                {
+                    {"Authorization", "Bearer " + oauth.access_token }
+                }
             };
 
             // prepare & submit workitem
             // the callback contains the connectionId (used to identify the client) and the outputFileName of this workitem
-            string callbackUrl = string.Format("{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}", OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"), browerConnectionId, outputFileNameOSS);
+            string callbackUrl = string.Format(
+                "{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}", 
+                OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"), 
+                browerConnectionId, outputFileNameOSS
+                );
             WorkItem workItemSpec = new WorkItem()
             {
                 ActivityId = activityName,
@@ -330,8 +355,8 @@ namespace WebKitchenBuilder.Controllers
         {
             { "inputFile", inputFileArgument },
             { "inputJson",  inputJsonArgument },
-            { "outputFile", outputFileArgument },
-            { "onComplete", new XrefTreeArgument { Verb = Verb.Post, Url = callbackUrl } }
+            { "outputFile", outputFileArgument }//,
+            //{ "onComplete", new XrefTreeArgument { Verb = Verb.Post, Url = callbackUrl } }
         }
             };
             WorkItemStatus workItemStatus = await _designAutomation.CreateWorkItemAsync(workItemSpec);

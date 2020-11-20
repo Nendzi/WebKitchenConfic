@@ -17,34 +17,35 @@
 /////////////////////////////////////////////////////////////////////
 
 $(document).ready(function () {
-    prepareLists();
-
-    $('#clearAccount').click(clearAccount);
-    $('#defineActivityShow').click(defineActivityModal);
-    $('#createAppBundleActivity').click(createAppBundleActivity);
+    //prepareLists();
+    //$('#clearAccount').click(clearAccount);
+    //$('#defineActivityShow').click(defineActivityModal);
+    //$('#createAppBundleActivity').click(createAppBundleActivity);
     $('#startWorkitem').click(startWorkitem);
 
     startConnection();
+    createAppBundleActivity();
+
 });
 
 function prepareLists() {
-    list('activity', '/api/forge/designautomation/activities');
-    list('engines', '/api/forge/designautomation/engines');
-    list('localBundles', '/api/appbundles');
+//    list('activity', '/api/forge/designautomation/activities');
+//    list('engines', '/api/forge/designautomation/engines');
+//    list('localBundles', '/api/appbundles');
 }
 
-function list(control, endpoint) {
-    $('#' + control).find('option').remove().end();
-    jQuery.ajax({
-        url: endpoint,
-        success: function (list) {
-            if (list.length === 0)
-                $('#' + control).append($('<option>', { disabled: true, text: 'Nothing found' }));
-            else
-                list.forEach(function (item) { $('#' + control).append($('<option>', { value: item, text: item })); })
-        }
-    });
-}
+//function list(control, endpoint) {
+//    $('#' + control).find('option').remove().end();
+//    jQuery.ajax({
+//        url: endpoint,
+//        success: function (list) {
+//            if (list.length === 0)
+//                $('#' + control).append($('<option>', { disabled: true, text: 'Nothing found' }));
+//            else
+//                list.forEach(function (item) { $('#' + control).append($('<option>', { value: item, text: item })); })
+//        }
+//    });
+//}
 
 function clearAccount() {
     if (!confirm('Clear existing activities & appbundles before start. ' +
@@ -67,8 +68,7 @@ function defineActivityModal() {
 
 function createAppBundleActivity() {
     startConnection(function () {
-        writeLog("Defining appbundle and activity for " + $('#engines').val());
-        $("#defineActivityModal").modal('toggle');
+        writeLog("Defining appbundle and activity for " + "Autodesk.Inventor+2021");
         createAppBundle(function () {
             createActivity(function () {
                 prepareLists();
@@ -78,13 +78,14 @@ function createAppBundleActivity() {
 }
 
 function createAppBundle(cb) {
+    writeLog("Creating Bundle");
     jQuery.ajax({
         url: 'api/forge/designautomation/appbundles',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-            zipFileName: "KitchenConfig.bundle.zip", // $('#localBundles').val(),
-            engine: "Autodesk.Inventor+2021" //$('#engines').val()
+            zipFileName: 'KitchenConfig.bundle.zip', // $('#localBundles').val(),
+            engine: 'Autodesk.Inventor+2021' //$('#engines').val()
         }),
         success: function (res) {
             writeLog('AppBundle: ' + res.appBundle + ', v' + res.version);
@@ -93,19 +94,17 @@ function createAppBundle(cb) {
     });
 }
 
-
-var curentActivity;
 function createActivity(cb) {
+    writeLog("Creating activity");
     jQuery.ajax({
         url: 'api/forge/designautomation/activities',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-            zipFileName: "Kitchen.zip", //$('#localBundles').val(),
-            engine: "Autodesk.Inventor+2021" //$('#engines').val()
+            zipFileName: 'Kitchen.zip', //$('#localBundles').val(),
+            engine: 'Autodesk.Inventor+2021' //$('#engines').val()
         }),
         success: function (res) {
-            curentActivity = res.activity.id;
             writeLog('Activity: ' + res.activity);
             if (cb) cb();
         }
@@ -113,24 +112,23 @@ function createActivity(cb) {
 }
 
 function startWorkitem() {
-    // nađi kitchenconfig
-    // pošalji radni set
-    // pokreni radni element
-    // skini rezultat
-
+    
     //var inputFileField = document.getElementById('inputFile');
     //if (inputFileField.files.length === 0) { alert('Please select an input file'); return; }
     //if ($('#activity').val() === null) { alert('Please select an activity'); return };
     //var file = inputFileField.files[0];
+    writeLog("Starting Workitem");
     startConnection(function () {
         var formData = new FormData();
         //formData.append('inputFile', file);
-        formData.append('data', JSON.stringify({
-            width: $('#elementWidth').val(),
-            height: $('#elementHeight').val(),
-            activityName: curentActivity, // $('#activity').val(),
-            browerConnectionId: connectionId
-        }));
+        formData.append('data', collectKitchenStructure()
+            //JSON.stringify({
+            //width: $('#elementWidth').val(),
+            //height: $('#elementHeight').val(),
+            //activityName: 'KitchenConfig', // $('#activity').val(),
+            //browerConnectionId: connectionId
+        //})
+    );
         writeLog('Uploading input file...');
         $.ajax({
             url: 'api/forge/designautomation/workitems',
@@ -146,9 +144,10 @@ function startWorkitem() {
 }
 
 function writeLog(text) {
-  $('#outputlog').append('<div style="border-top: 1px dashed #C0C0C0">' + text + '</div>');
-  //var elem = document.getElementById('outputlog');
-  //elem.scrollTop = elem.scrollHeight;
+    console.log(text);
+    $('#outputlog').append('<div style="border-top: 1px dashed #C0C0C0">' + text + '</div>');
+    var elem = document.getElementById('outputlog');
+    elem.scrollTop = elem.scrollHeight;
 }
 
 var connection;
