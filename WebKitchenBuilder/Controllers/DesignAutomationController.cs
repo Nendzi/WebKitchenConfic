@@ -64,7 +64,7 @@ namespace WebKitchenBuilder.Controllers
         /// Alias for the app (e.g. DEV, STG, PROD). This value may come from an environment variable
         public static string Alias { get { return "dev"; } }
         // bucket name
-        public string bucketKey { get { return NickName.ToLower() + "-" + AppBundleName.ToLower(); } }
+        public string bucketKey => (NickName + "-" + AppBundleName).ToLower();
         // Design Automation v3 API
         DesignAutomationClient _designAutomation;
 
