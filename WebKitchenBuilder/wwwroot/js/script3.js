@@ -10,36 +10,36 @@ var add = (function () {
 /*funkcija za proveru*/
 function proveraFunkcija(event, objProvera) {
     var tipka = event.which;
-     if (tipka > 47 && tipka < 58) {
+    if (tipka > 47 && tipka < 58) {
         document.getElementById("poruka").style.display = "none";
         dodajAktivno();
-        
+
     }
-    else if (tipka > 95 && tipka < 106){
+    else if (tipka > 95 && tipka < 106) {
         document.getElementById("poruka").style.display = "none";
         dodajAktivno();
-        
+
     }
     else if (tipka == 46) {
         document.getElementById("poruka").style.display = "none";
         dodajAktivno();
-       
+
     }
     else if (tipka == 8) {
         document.getElementById("poruka").style.display = "none";
-        dodajAktivno();        
+        dodajAktivno();
     }
     else {
-       document.getElementById("poruka").style.display = "block";
+        document.getElementById("poruka").style.display = "block";
         dodajNeAktivno();
         proslediNeAktivno();
-         
-        /*briše staro polje _(celo) i dodaje novo polje*/ 
+
+        /*briše staro polje _(celo) i dodaje novo polje*/
         var polje = document.getElementById(objProvera.id).parentNode;
         polje.innerHTML += document.getElementById(objProvera.id).innerHTML;
         /*ponovo izračunati procente*/
         /* NAĆI ZAŠTO NE RAČUNA OSTATAK SA SVIM POLJIMA*/
-         
+
         var ar = ostatakIzračunavanje()[2];
         var dar = ar.length;
         ispravljeniOstatak();
@@ -50,13 +50,13 @@ function proveraFunkcija(event, objProvera) {
 
         var suma = ostatakIzračunavanje()[1];
         if (suma == 100 || suma < 100) {
-        document.getElementById("poruka2").style.display = "none";
+            document.getElementById("poruka2").style.display = "none";
         }
         else if (suma > 100) {
-        document.getElementById("poruka2").style.display = "block";
+            document.getElementById("poruka2").style.display = "block";
         }
     }
-}  
+}
 /*promena aktivnosti dugmića prosledi i dodaj*/
 function dodajAktivno() {
     var nov = document.getElementById("nova");
@@ -85,7 +85,7 @@ function filterNiza(value) {
 }
 /*funkcija za izračunavanje ispravljenog ostatka kad se obrišu uneti procenti
 a ne dodaje se novo polje*/
-function ispravljeniOstatak(){
+function ispravljeniOstatak() {
     /*suma skraćenog niza*/
     var ar = ostatakIzračunavanje()[2];
     var nizSkraćen = ar.filter(filterNiza);
@@ -95,7 +95,7 @@ function ispravljeniOstatak(){
     for (let ind = 0; ind < dniz; ind++) {
         kratkaSuma += parseInt(nizSkraćen[ind]);
     }
-    var dniz= nizSkraćen.length;
+    var dniz = nizSkraćen.length;
     var razlika = 100 - parseInt(kratkaSuma);
     var n = dar - dniz;
     var količnik = razlika / n;
@@ -128,7 +128,7 @@ function naUnos(objUnos) {
     var cBroj = parseInt(c);
     var ostatakBroj = parseInt(ostatak);
     var suma = ostatakIzračunavanje()[1];
-   /*dužine oba niza: celog i skraćenog - kad se obrišu nule*/
+    /*dužine oba niza: celog i skraćenog - kad se obrišu nule*/
     var dar = ispravljeniOstatak()[1];
     var dniz = ispravljeniOstatak()[2];
     /*pošto se ostatak izračunava nakon unete vrednosti u naredno polje
@@ -136,7 +136,7 @@ function naUnos(objUnos) {
     var ost = cBroj + ostatakBroj;
     /*ako su dobro unete sve vrednosti ostatak je nula
     menja se aktivno/neaktivno dugme Add new i Submit*/
-    
+
     if (ostatak === 0) {
         dodajNeAktivno();
         proslediAktivno();
@@ -150,11 +150,11 @@ function naUnos(objUnos) {
     }
     else if (dniz < dar || cBroj == 0) {
         var količnik = ispravljeniOstatak()[0];
-        
+
         for (let ind = 0; ind < dar; ind++) {
             document.getElementsByClassName("percentum")[ind].setAttribute("placeholder", "Left " + količnik.toPrecision(4) + "%");
         }
-    
+
         dodajNeAktivno();
     }
     else if (ostatak > 0) {
@@ -173,7 +173,7 @@ function naUnos(objUnos) {
         document.getElementById("poruka2").style.display = "none";
         /*upisuje ostatak u polje nakon prepravke, kad se prekoračilo 100%*/
         objUnos.setAttribute("placeholder", "Left " + ost + "%");
-    }    
+    }
 }
 /*funkcija za dodavanje HTML*/
 function dodajFunkcija() {
@@ -187,14 +187,14 @@ function dodajFunkcija() {
         '<option value="closed">Closed</option>' +
         '<option value="open">Open</option>' +
         '<option value="drawer">Drawer</option>' +
-        '<option value="doublDoor">Double door</option>' +
+        '<option value="doubleDoor">Double door</option>' +
         '<option value="leftDoor">Left door</option>' +
         '<option value="rightdoor">Right door</option>' +
         '<option value="cassette">Cassette</option>' +
         '</select>' +
         '<div class="teksterija">' +
-        '<textarea class="percentum"' + 'id="procenti' + i + '" name="unos' + i + 
-        '" placeholder = " Left ' + ostatak + '%" ' + 
+        '<textarea class="percentum"' + 'id="procenti' + i + '" name="unos' + i +
+        '" placeholder = " Left ' + ostatak + '%" ' +
         'onkeydown="proveraFunkcija(event, this)" oninput="naUnos(this)"></textarea>' +
         '<div class="brisanje">' +
         '<button type="button" class = "zaBrisanje" id="brisanje' + i + '" onclick="obrisatiFunkcija(this)">&#9587</button>' +
@@ -234,7 +234,7 @@ function obrisatiFunkcija(objBrisanje) {
         dodajAktivno();
         document.getElementById("poruka2").style.display = "none";
     }
-      else if (ostatak === 0) {
+    else if (ostatak === 0) {
         proslediAktivno();
         dodajNeAktivno();
         document.getElementById("poruka2").style.display = "none";
@@ -254,9 +254,10 @@ function collectKitchenStructure() {
     var elemHeigthValue = [];
     var elemTypeValue = [];
 
+    var j = elemHeigth.length - 1;
     for (var i = 0; i < elemHeigth.length; i++) {
-        elemHeigthValue[i] = elemHeigth[i].value;
-        elemTypeValue[i] = elemType[i].value;
+        elemHeigthValue[i] = elemHeigth[j - i].value;
+        elemTypeValue[i] = elemType[j - i].value;
     }
 
     var myJsonCollect = JSON.stringify({

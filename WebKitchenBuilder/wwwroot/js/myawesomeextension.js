@@ -6,6 +6,7 @@
     }
 
     load() {
+        this.viewer.setSelectionMode(Autodesk.Viewing.SelectionMode.LAST_OBJECT);
         console.log('MyAwesomeExtensions has been loaded');
         return true;
     }
@@ -34,9 +35,10 @@
         this._button = new Autodesk.Viewing.UI.Button('myAwesomeExtensionButton');
         this._button.setToolTip('Open the doors');
         this._button.onClick = (ev) => {
-            // this is place for code for preesed button
-            //const DOOR_PARTS = this.viewer.getSelection();
-            const DOOR_PARTS = [23, 25, 27, 29, 31, 33, 35];
+            // this is place for code for pressed button
+            const DOOR_PARTS = this.viewer.getSelection();
+            this._getObjectTreeIDs();
+            //const DOOR_PARTS = [23, 25, 27, 29, 31, 33, 35];
             console.log(DOOR_PARTS);
 
             if (this.doorIsOpen) {
@@ -55,6 +57,11 @@
 
         this._button.addClass('myAwesomeExtensionIcon');
         this._group.addControl(this._button);
+    }
+
+    _getObjectTreeIDs() {
+        var rootElement = this.viewer.getRoot();
+        console.log(rootElement);
     }
 
     doorIsOpen = false;
