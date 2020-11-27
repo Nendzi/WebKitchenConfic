@@ -1,4 +1,4 @@
-﻿html, body {
+html, body {
 	min-height: 100%;
 	height: 100%;
 }
@@ -10,27 +10,83 @@
 body {
 	padding-top: 80px; /* space for the top nav bar */
 	margin-right: 30px;
+	/*NOVO*/
+    transition: background-color .5s;/*da sporije menja pozadinu kad se pojavi side bar*/
 }
-
-.navTextArea {
+/*ovde mi se čini da ima izmena*/
+.navTextArea, #wantedForgeClientID {
 	resize: none;
 	height: 24px;
 	width: 250px;
-	margin: 28px 20px;
+    margin: 15px 25px;
+    border: 1px solid black;
+    border-radius: 5px;
 }
-
+/*NOVO*/
+.navTextArea::placeholder{
+    text-align: center;
+}
+.mySideText{
+    text-align: center;
+    margin: 20px 0;
+}
+/*odnosi se na stare dugmiće za logovanje-
+ako ih brišeš ni .navClient ti neće trebati*/
 .navClient {
 	line-height: 80px;
 }
-
+li{
+    list-style: none;
+}
+/*NOVO*/
+.sidenav {
+  height: 65%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 25%;
+  right: 0;
+  background-color: white;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  border-radius: 30px 0 0 30px;
+}
+.closebtn{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+a.closebtn{
+    font-size: 2rem;
+    text-decoration: none;
+    font-weight: bold;
+    color: red;
+}/*dovde*/
 #appBuckets {
 	overflow: auto;
 	width: 100%;
 	height: calc(40vh - 150px);
 }
-
-#forgeViewer {
+#forgeIDsList{
+    display: flex;
+    flex-direction: column;
+}
+#logInButton, #subButtonLog{
+    margin: 10px 0;
+}
+#forgeViewer ,#selectLabelFCID{
 	width: 100%;
+}
+#selectLabelFCID{
+    padding-left: 40px;
+}
+#wantedForgeClientID{
+    margin-left: 70px;
+}
+/*mislim da je novo ili promenjeno*/
+.loginList{
+    padding-top: 30px;
 }
 
 .myAwesomeExtensionIcon {
@@ -137,7 +193,7 @@ label {
 	overflow: hidden;
 }
 
-#startWorkitem, #nova {
+#startWorkitem, #nova, .buttonsForRegistration {
 	background-color:#5bc0de;
 	color: white;
 	height: 25px;
@@ -145,7 +201,23 @@ label {
 	margin: 12px 5px 0 5px;
 	float: left;
 }
-
+/*NOVO*/
+.buttonsForRegistration{
+    float: right;
+    margin-top: 0;
+}
+.flexConteinerBtn{
+    display: flex;
+    justify-content: center;
+}
+button#logInButton, #subButton{
+    float: unset;
+    
+}
+.registrationButtons{
+    padding: 27.5px 15px;
+}
+/*dovde*/
 .neaktivna {
 	opacity: 50%;
 	cursor: not-allowed;

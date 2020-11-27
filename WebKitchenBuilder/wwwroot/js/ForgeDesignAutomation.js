@@ -19,6 +19,7 @@
 $(document).ready(function () {
     $('#startWorkitem').click(startWorkitem);
     $('#forgeViewer').click(animateSelectedElement)
+
     $("#forgeViewer").css("display", "block");
     $("#outputWindow").css("display", "none");
 

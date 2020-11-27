@@ -2,26 +2,26 @@
     const DOOR_PARTS = NOP_VIEWER.getSelection();
     if (DOOR_PARTS.length > 0) {
         var allElementsInAssembly = searchInOwnAssembly(DOOR_PARTS[0]);
-        if (allElementsInAssembly.length > 1) {
+        if (allElementsInAssembly.length > 2) {
 
             if (doorIsOpen) {
                 doorIsOpen = false;
 
                 doorChangesState = true;
                 if (allElementsInAssembly[0].substr(0, 6) === "Drawer") {
-                    _closeDrawer(allElementsInAssembly);
-                } else {
-                    _closeDoors(allElementsInAssembly);
+                    _animateElement(allElementsInAssembly, -0.5, 0.1, "Drawer");
+                } else if (allElementsInAssembly[0].substr(0, 5) === "Doors") {
+                    _animateElement(allElementsInAssembly, -0.5, 0.1, "Doors");
                 }
             }
             else {
                 doorIsOpen = true;
 
                 doorChangesState = true;
-                if (allElementsInAssembly[0].substr(0, 6) === "Drawer") {                    
-                    _openDrawer(allElementsInAssembly);
-                } else {
-                    _openDoors(allElementsInAssembly);
+                if (allElementsInAssembly[0].substr(0, 6) === "Drawer") {
+                    _animateElement(allElementsInAssembly, 0, -0.1, "Drawer");
+                } else if (allElementsInAssembly[0].substr(0, 5) === "Doors") {
+                    _animateElement(allElementsInAssembly, 0, -0.1, "Doors");
                 }
             }
             NOP_VIEWER.clearSelection();
@@ -70,26 +70,26 @@ doorIsOpen = false;
 doorChangesState = false;
 
 function _openDoors(ids) {
-    _animateDoors(ids, 0, -0.1, "Doors");
+
 }
 
 function _closeDoors(ids) {
-    _animateDoors(ids, -0.5, 0.1,"Doors");
+
 }
 
 function _closeDrawer(ids) {
-    _animateDoors(ids, -0.5, 0.1, "Drawer")
+
 }
 
 function _openDrawer(ids) {
-    _animateDoors(ids, 0, -0.1, "Drawer")
+
 }
 
 function _disableAnimations() {
     clearInterval(this._timer);
 }
 
-function _animateDoors(ids, startPosition, step, animationSelector) {
+function _animateElement(ids, startPosition, step, animationSelector) {
     const viewer = this.viewer;
     const it = viewer.model.getData().instanceTree;
     //console.log(it);
@@ -120,14 +120,15 @@ function _animateDoors(ids, startPosition, step, animationSelector) {
             const mainMtrx = new THREE.Matrix4();
             //console.log(mainMtrx);
 
-            
+
             if (animationSelector === "Doors") {
                 // Animate door
-                posMtrx.multiply(mainMtrx.makeRotationZ(Math.PI * counter)).multiply(someMtrx);            
+                posMtrx.multiply(mainMtrx.makeRotationZ(Math.PI * counter)).multiply(someMtrx);
             } else if (animationSelector === "Drawer") {
                 // Animate drawer
-                posMtrx.multiply(mainMtrx.makeTranslation(0, 1000 * counter, 0)).multiply(someMtrx);
-            }            
+                posMtrx.makeTranslation(0, 1000 * counter, 0);
+                //posMtrx.multiply(mainMtrx.makeTranslation(0, 1000 * counter, 0)).multiply(someMtrx);
+            }
             //console.log(posMtrx);
             //mesh.quaternion.setFromAxisAngle(axis, Math.PI * counter);
             posMtrx.decompose(mesh.position, mesh.quaternion, mesh.scale);
@@ -137,13 +138,13 @@ function _animateDoors(ids, startPosition, step, animationSelector) {
         counter += step;
         console.log(counter);
         viewer.impl.invalidate(true, true, true);
-        if (counter < -0.5) {
+        if (counter < -0.505) {
             this.doorIsOpen = true;
             this.doorChangesState = false;
             clearInterval(_timer);
             //this._disableAnimations();
         }
-        if (counter > 0) {
+        if (counter > 0.05) {
             this.doorIsOpen = false;
             this.doorChangesState = false;
             clearInterval(_timer);
