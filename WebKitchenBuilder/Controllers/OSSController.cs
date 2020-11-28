@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System;
 
 namespace WebKitchenBuilder.Controllers
 {
@@ -151,7 +152,6 @@ namespace WebKitchenBuilder.Controllers
             using (var stream = new FileStream(fileSavePath, FileMode.Create))
                 await input.fileToUpload.CopyToAsync(stream);
 
-
             // get the bucket...
             dynamic oauth = await OAuthController.GetInternalAsync();
             ObjectsApi objects = new ObjectsApi();
@@ -179,6 +179,41 @@ namespace WebKitchenBuilder.Controllers
         }
 
         /// <summary>
+        /// Make signed Url for object in bucket
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/forge/objects/signed")]
+        public async Task<dynamic> DownloadObject([FromBody] DownloadFile input)
+        {
+            // get the bucket
+            dynamic oauth = await OAuthController.GetInternalAsync();
+            ObjectsApi objects = new ObjectsApi();
+            objects.Configuration.AccessToken = oauth.access_token;
+
+            // collect information about file
+            string bucketKey = input.bucketKey;
+            string fileToDownload = input.fileToDownload;
+
+            PostBucketsSigned postBucketsSigned = new PostBucketsSigned(20);
+            try
+            {
+                dynamic result = await objects.CreateSignedResourceAsync(bucketKey, fileToDownload, postBucketsSigned);
+                return result;
+            }
+            catch (Exception ex) {  }
+
+            return null;
+        }
+
+        public class DownloadFile
+        {
+            public string bucketKey { get; set; }
+            public string fileToDownload { get; set; }
+        }
+
+        /// <summary>
         /// Delete single file from bucket
         /// </summary>
         /// <param name="objInfo">Fields in DeleteObjectModel must be same as data in function deleteFile</param>
@@ -195,6 +230,7 @@ namespace WebKitchenBuilder.Controllers
 
             return Task.CompletedTask;
         }
+
 
         /// <summary>
         /// Base64 enconde a string

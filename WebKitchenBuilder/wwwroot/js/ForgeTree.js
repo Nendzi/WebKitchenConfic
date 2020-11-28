@@ -170,6 +170,14 @@ function autodeskCustomMenu(autodeskNode) {
                     },
                     icon: 'glyphicon glyphicon-eye-open'
                 },
+                downloadFile: {
+                    label: "Download",
+                    action: function () {
+                        var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
+                        downloadObject(treeNode);
+                    },
+                    icon: 'glyphicon glyphicon-cloud-download'
+                },
                 deleteFile: {
                     label: "Delete",
                     action: function () {
@@ -201,12 +209,26 @@ function autodeskCustomMenu(autodeskNode) {
             };
             break;
     }
-
     return items;
 }
 
 function uploadFile() {
     $('#hiddenUploadField').click();
+}
+
+function downloadObject(node) {
+    var bucketKey = node.parent;
+    var objectName = node.text;
+    jQuery.ajax({
+        url: '/api/forge/objects/signed',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'bucketKey': bucketKey, 'fileToDownload': objectName }),
+        type: 'POST',
+        success: function (res) {
+            document.getElementById('responseMessage').innerHTML = '<a href="' + res.signedUrl + '">Download result file here</a>';
+        },
+        error: function (err) { console.log(err); }
+    });
 }
 
 function deleteBucket() {

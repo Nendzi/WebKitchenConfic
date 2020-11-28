@@ -114,8 +114,7 @@ function startWorkitem() {
     writeLog("Starting Workitem");
     startConnection(function () {
         var formData = new FormData();
-        formData.append('data', collectKitchenStructure()
-    );
+        formData.append('data', collectKitchenStructure());
         writeLog('Uploading input file...');
         $.ajax({
             url: 'api/forge/designautomation/workitems',
