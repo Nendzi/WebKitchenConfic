@@ -115,7 +115,7 @@ function prepareAppBucketTree() {
             })
         }
         // moj dodatak za prikazivanje zip fajla
-        else if (data != null && data.node != null && data.node.type == 'zipfile'){
+        else if (data != null && data.node != null && data.node.type == 'zipfile') {
             $("#forgeViewer").empty();
             var urn = data.node.id;
             getForgeToken(function (access_token) {
@@ -162,6 +162,14 @@ function autodeskCustomMenu(autodeskNode) {
             break;
         case "zipfile":
             items = {
+                translateFile: {
+                    label: "Translate",
+                    action: function () {
+                        var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
+                        translateObject(treeNode);
+                    },
+                    icon: 'glyphicon glyphicon-eye-open'
+                },
                 deleteFile: {
                     label: "Delete",
                     action: function () {
@@ -232,7 +240,7 @@ function translateObject(node) {
 
 function deleteFile(node) {
     $("#forgeViewer").empty();
-    //var node =  $('#appBuckets').jstree(true).get_selected(true)[0];
+    var node = $('#appBuckets').jstree(true).get_selected(true)[0];
     var bucketKey = node.parent;
     var objectKey = node.text;
 
@@ -246,5 +254,4 @@ function deleteFile(node) {
         },
         error: function (err) { console.log(err); }
     });
-
 }

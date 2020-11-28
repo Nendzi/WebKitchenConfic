@@ -43,7 +43,7 @@
                 <button type="button" class="buttonsForRegistration" id="clientSecret" onclick="openNavSignin()">Sign in</button>
             </div>
         </div>
-     <!--OVO JE MENJANO-->   
+        <!--OVO JE MENJANO-->
     </nav>
     <div id="mySidenavSignin" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNavSignin()">&times;</a>
@@ -73,8 +73,8 @@
             <div class="flexConteinerBtn">
                 <button type="submit" id="subButton" class="buttonsForRegistration">Submit</button>
             </div>
-        </div>        
-        
+        </div>
+
     </div>
     <div id="mySidenavLogin" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNavLogin()">&times;</a>
@@ -90,7 +90,7 @@
                         <input type="password" class="navTextArea" id="userPassword" placeholder="Input your password" />
                     </li>
                 </ul>
-                
+
             </div>
             <div id="forgeIDsList">
                 <label for="listOfForgeCilenIDs" id="selectLabelFCID">Choose wanted Forge account:</label>
@@ -102,7 +102,7 @@
         </div>
 
     </div>
-<!--DOVDE JE MENJANO - ne znam kako se piše "dovde" ;)-->
+    <!--DOVDE JE MENJANO - ne znam kako se piše "dovde" ;)-->
     <!-- End of navbar -->
     <div class="container-fluid fill">
         <div class="row fill">
@@ -172,9 +172,12 @@
             <div class="col-sm-9" id="outputWindow">
                 <pre id="outputlog" style="height: calc(100vh - 120px); overflow-y: scroll;"></pre>
             </div>
+            <form id="uploadFile" method='post' enctype="multipart/form-data">
+                <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden" />
+            </form>
 
         </div>
-    </div>   
-    
+    </div>
+
 </body>
 </html>
