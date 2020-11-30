@@ -10,12 +10,12 @@ function launchViewer(urn) {
 
     Autodesk.Viewing.Initializer(options, () => {
         viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'),
-            { extensions: ['Autodesk.DocumentBrowser', 'MyAwesomeExtension'] }); //,'HandleSelectionExtension','ModelSummaryExtension'
+            { extensions: ['Autodesk.DocumentBrowser'] }); //,'HandleSelectionExtension','ModelSummaryExtension', 'MyAwesomeExtension'
         viewer.setTheme('light-theme');        
         viewer.start();
         viewer.setLightPreset(18);
         var documentId = 'urn:' + urn;
-        
+        //viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, animateSelectedElement);
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
 }
