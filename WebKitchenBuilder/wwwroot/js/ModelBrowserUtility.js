@@ -20,6 +20,8 @@
                     _animateElement(allElementsInAssembly, -0.5, 0.1, "Leva");
                 } else if (allElementsInAssembly[0].substr(0, 5) === "Desna") {
                     _animateElement(allElementsInAssembly, -0.5, 0.1, "Desna");
+                } else if (allElementsInAssembly[0].substr(0, 4) === "Vodo") {
+                    _animateElement(allElementsInAssembly, -0.5, 0.1, "Vodo");
                 }
             }
             else {
@@ -32,6 +34,8 @@
                     _animateElement(allElementsInAssembly, 0, -0.1, "Leva");
                 } else if (allElementsInAssembly[0].substr(0, 5) === "Desna") {
                     _animateElement(allElementsInAssembly, 0, -0.1, "Desna");
+                } else if (allElementsInAssembly[0].substr(0, 4) === "Vodo") {
+                    _animateElement(allElementsInAssembly, 0, -0.1, "Vodo");
                 }
             }
             NOP_VIEWER.clearSelection();
@@ -132,12 +136,11 @@ function _animateElement(ids, startPosition, step, animationSelector) {
             const midX = (bBox.max.x + bBox.min.x) / 2;
             const midY = (bBox.max.y + bBox.min.y) / 2;
             const midZ = (bBox.max.z + bBox.min.z) / 2;
-            const zAxisZpos = 0;
-            const mainVector = new THREE.Vector3();
+            const mainVector = new THREE.Vector3();            
 
             if (deltaX < deltaZ) {
                 // axis is along Z axis
-                mainVector.set(0,0,1);
+                mainVector.set(0, 0, 1);
             } else {
                 // axis is along X axis
                 mainVector.set(1, 0, 0);
@@ -145,6 +148,7 @@ function _animateElement(ids, startPosition, step, animationSelector) {
 
             const mainAxisXpos = -midX;
             const mainAxisYpos = -midY;
+            const mainAxisZpos = -midZ;
             const mainMtrx = new THREE.Matrix4();
 
             if (animationSelector === "Leva") {
@@ -162,6 +166,12 @@ function _animateElement(ids, startPosition, step, animationSelector) {
                 // Animate right door
                 const posMtrx = new THREE.Matrix4().setPosition(new THREE.Vector3(-mainAxisXpos, -mainAxisYpos, 0));
                 const someMtrx = new THREE.Matrix4().setPosition(new THREE.Vector3(mainAxisXpos, mainAxisYpos, 0));
+                posMtrx.multiply(mainMtrx.makeRotationAxis(mainVector, -Math.PI * counter)).multiply(someMtrx);
+                posMtrx.decompose(mesh.position, mesh.quaternion, mesh.scale);
+            } else if (animationSelector === "Vodo") {
+                // Animate Cassette door
+                const posMtrx = new THREE.Matrix4().setPosition(new THREE.Vector3(0, -mainAxisYpos, -mainAxisZpos));
+                const someMtrx = new THREE.Matrix4().setPosition(new THREE.Vector3(0, mainAxisYpos, mainAxisZpos));
                 posMtrx.multiply(mainMtrx.makeRotationAxis(mainVector, -Math.PI * counter)).multiply(someMtrx);
                 posMtrx.decompose(mesh.position, mesh.quaternion, mesh.scale);
             }
