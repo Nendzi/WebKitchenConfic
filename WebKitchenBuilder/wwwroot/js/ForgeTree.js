@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    prepareAppBucketTree();
+    //prepareAppBucketTree(); za sada isključujem ali je pozivam nakon logovanja
     $('#refreshBuckets').click(function () {
         $('#appBuckets').jstree(true).refresh();
     });

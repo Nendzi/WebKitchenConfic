@@ -4,8 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebKitchenBuilder", "WebKitchenBuilder.csproj", "{8284527D-5803-4B71-A135-9D68F042246B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CDBE988C-A9E2-430A-947E-698B8D357E7D} = {CDBE988C-A9E2-430A-947E-698B8D357E7D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenConfig", "..\..\..\..\..\Inventor\Projects\Kuhinjski elementi\PlugIn\KitchenConfigPlugIn\KitchenConfig\KitchenConfig.csproj", "{62BD109C-5314-4E16-9E54-7DB520753610}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDBLibrary", "..\..\..\MongoDB\MongoDBLibrary\MongoDBLibrary.csproj", "{CDBE988C-A9E2-430A-947E-698B8D357E7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{62BD109C-5314-4E16-9E54-7DB520753610}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62BD109C-5314-4E16-9E54-7DB520753610}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62BD109C-5314-4E16-9E54-7DB520753610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDBE988C-A9E2-430A-947E-698B8D357E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDBE988C-A9E2-430A-947E-698B8D357E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDBE988C-A9E2-430A-947E-698B8D357E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDBE988C-A9E2-430A-947E-698B8D357E7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,8 +17,8 @@ body {
 .navTextArea, #wantedForgeClientID {
     resize: none;
     height: 24px;
-    width: 250px;
-    margin: 15px 25px;
+    width: 280px;
+    margin: 15px auto;
     border: 1px solid black;
     border-radius: 5px;
 }
@@ -83,17 +83,14 @@ a.closebtn {
     margin: 10px 0;
 }
 
-#forgeViewer, #selectLabelFCID {
+#forgeViewer {
     width: 100%;
 }
 
-#selectLabelFCID {
+#loginInfo {
     padding-left: 40px;
 }
 
-#wantedForgeClientID {
-    margin-left: 70px;
-}
 /*mislim da je novo ili promenjeno*/
 .loginList {
     padding-top: 30px;

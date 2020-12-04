@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Autodesk.Forge;
+using WebKitchenBuilder.Models;
 
 namespace WebKitchenBuilder.Controllers
 {
@@ -16,7 +17,9 @@ namespace WebKitchenBuilder.Controllers
         // them after the expires_in time (in seconds)
         private static dynamic InternalToken { get; set; }
         private static dynamic PublicToken { get; set; }
-
+        //depo for Forge_Client_ID and secret
+        private static string FORGE_CLIENT_ID { get; set; }
+        private static string FORGE_CLIENT_SECRET { get; set; }
 
         /// <summary>
         /// Get access token with internal (write) scope
@@ -27,23 +30,31 @@ namespace WebKitchenBuilder.Controllers
         {
             if (PublicToken == null || PublicToken.ExpiresAt < DateTime.UtcNow)
             {
-                PublicToken = await Get2LeggedTokenAsync(new Scope[] { Scope.ViewablesRead, Scope.DataRead, Scope.DataWrite});
+                PublicToken = await Get2LeggedTokenAsync(new Scope[] { Scope.ViewablesRead, Scope.DataRead, Scope.DataWrite });
                 PublicToken.ExpiresAt = DateTime.UtcNow.AddSeconds(PublicToken.expires_in);
             }
             return PublicToken;
+        }
+
+        [HttpPost]
+        [Route("api/forge/oauth/cred")]
+        public void SetCredentials([FromBody] UserModel userModel)
+        {
+            FORGE_CLIENT_ID = userModel.ForgeClient;
+            FORGE_CLIENT_SECRET = userModel.ForgeSecret;
         }
 
         public static async Task<dynamic> GetInternalAsync()
         {
             if (InternalToken == null || InternalToken.ExpiresAt < DateTime.UtcNow)
             {
-                InternalToken = await Get2LeggedTokenAsync(new Scope[] { 
-                    Scope.BucketCreate, 
-                    Scope.BucketRead, 
-                    Scope.BucketDelete, 
-                    Scope.DataRead, 
-                    Scope.DataWrite, 
-                    Scope.DataCreate, 
+                InternalToken = await Get2LeggedTokenAsync(new Scope[] {
+                    Scope.BucketCreate,
+                    Scope.BucketRead,
+                    Scope.BucketDelete,
+                    Scope.DataRead,
+                    Scope.DataWrite,
+                    Scope.DataCreate,
                     Scope.CodeAll });
                 InternalToken.ExpiresAt = DateTime.UtcNow.AddSeconds(InternalToken.expires_in);
             }
@@ -59,10 +70,12 @@ namespace WebKitchenBuilder.Controllers
             TwoLeggedApi oauth = new TwoLeggedApi();
             string grantType = "client_credentials";
             dynamic bearer = await oauth.AuthenticateAsync(
-              GetAppSetting("FORGE_CLIENT_ID"),
-              GetAppSetting("FORGE_CLIENT_SECRET"),
-              grantType,
-              scopes);
+                FORGE_CLIENT_ID,
+                FORGE_CLIENT_SECRET,
+              //GetAppSetting("FORGE_CLIENT_ID"),
+              //GetAppSetting("FORGE_CLIENT_SECRET"),
+                grantType,
+                scopes);
             return bearer;
         }
 

@@ -50,6 +50,7 @@ function prepareBucket() {
     jQuery.ajax({
         url: 'api/forge/oss/buckets',
         method: 'POST',
+        contentType: 'application/json',
         data: JSON.stringify({
             bucketKey: 'kitchenconfig'
         }),

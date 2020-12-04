@@ -8,11 +8,12 @@ function openNavSignin() {
         document.body.style.backgroundColor = "rgba(0,0,0,0.2)";
     }
 }
-
 function closeNavSignin() {
     document.getElementById("mySidenavSignin").style.width = "0";
     document.body.style.backgroundColor = "white";
+    document.getElementById("addingNewUserInfo").innerHTML = '';
 }
+
 function openNavLogin() {
     var signinidth = document.getElementById("mySidenavSignin").style.width;
     if (signinidth == "350px") {
@@ -26,4 +27,5 @@ function openNavLogin() {
 function closeNavLogin() {
     document.getElementById("mySidenavLogin").style.width = "0";
     document.body.style.backgroundColor = "white";
+    document.getElementById("loginInfo").innerHTML = '';
    }
