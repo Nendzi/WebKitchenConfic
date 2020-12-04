@@ -42,8 +42,8 @@
             </ul>
             <!--OVO JE DODATO-->
             <div class="registrationButtons">
-                <button type="button" class="buttonsForRegistration" id="clientID" onclick="openNavLogin()">Log in</button>
-                <button type="button" class="buttonsForRegistration" id="clientSecret" onclick="openNavSignin()">Sign in</button>
+                <button type="button" class="buttonsForRegistration genButton" id="clientID" onclick="openNavLogin()">Log in</button>
+                <button type="button" class="buttonsForRegistration genButton" id="clientSecret" onclick="openNavSignin()">Sign in</button>
             </div>
         </div>
         <!--OVO JE MENJANO-->
@@ -74,7 +74,7 @@
                 </li>
             </ul>
             <div class="flexConteinerBtn">
-                <button type="submit" id="subButton" class="buttonsForRegistration">Submit</button>                
+                <button type="submit" id="subButton" class="buttonsForRegistration">Submit</button>
             </div>
             <p id="addingNewUserInfo"></p>
         </div>
@@ -100,7 +100,9 @@
             </div>
             <p id="loginInfo"></p>
             <div id="forgeIDsList">
-                <select name="listOfForgeClientIDs" id="wantedForgeClientID"></select>
+                <select name="listOfForgeClientIDs" id="wantedForgeClientID">
+                    <option>Select Forge client ID</option>
+                </select>
             </div>
         </div>
     </div>
@@ -115,33 +117,33 @@
                         <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
                     </div>
                     <div id="appBuckets">
-                        Tree here
+                        You need to log in with Forge Client ID and Forge Client Secret. If you did not sign yet, you need to do it first before log in.
                     </div>
                     <div id="selektor">
                         <!--Ivanin kod ne krivite mene-->
                         <form action="#" method="POST" id="elForma">
                             <fieldset class="grupa">
                                 <legend class="naziv">Element configurator</legend>
-                                <input id="elementWidth" type="text" placeholder="Width in mm" />
-                                <input id="elementHeight" type="text" placeholder="Height in mm" />
-                                <div id="podela" class="razdela">
-                                    <div class="selekcija">
-                                        <label for="elementi">Choose front type:</label>
-                                        <div>
-                                            <select name="elementi" id="elementi" class="odabir">
-                                                <option value="closed">Closed</option>
-                                                <option value="open">Open</option>
-                                                <option value="drawer">Drawer</option>
-                                                <option value="doubleDoor">Double door</option>
-                                                <option value="leftDoor">Left door</option>
-                                                <option value="rightDoor">Right door</option>
-                                                <option value="cassette">Cassette</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="inputs">
+                                    <input class="inputField" id="elementWidth" type="text" placeholder="Width in mm" />
+                                    <input class="inputField" id="elementHeight" type="text" placeholder="Height in mm" />
+                                </div>
+                                <div class="selekcija">
+                                    <label for="elementi">Choose front type:</label>
+                                    <label class="labelWidth" for="procenti">Element heigth [%]:</label>
+                                </div>
+                                
+                                    <div id="podela" class="razdela">
+                                        <select name="elementi" id="elementi" class="odabir">
+                                            <option value="closed">Closed</option>
+                                            <option value="open">Open</option>
+                                            <option value="drawer">Drawer</option>
+                                            <option value="doubleDoor">Double door</option>
+                                            <option value="leftDoor">Left door</option>
+                                            <option value="rightDoor">Right door</option>
+                                            <option value="cassette">Cassette</option>
+                                        </select>
 
-                                    <div class="broj">
-                                        <label for="procenti">Element heigth [%]:</label>
                                         <div class="teksterija">
                                             <!--oninput: izmena funkcija - menja aktivno/neaktivno stanje dugmeta-->
                                             <textarea class="percentum" id="procenti" name="unos" placeholder="Left 100%" onkeydown="proveraFunkcija(event, this)" oninput="naUnos(this)"></textarea>
@@ -150,17 +152,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
+                                
                                 <!--mesto gde se dodaje novi deo forme-->
                                 <div id="dodatak1"></div>
+
                                 <p id="poruka">Input procentage</p>
                                 <p id="poruka2">Invalid input, overflow of 100%</p>
                                 <p id="proba"></p>
-                                <!--onclick: Nenina funkcija-->
-                                <button type="button" id="startWorkitem" class="neaktivna" disabled>Submit</button>
-                                <!--onclick: dodaj funkcija - dodaje novi HTML-->
-                                <button type="button" id="nova" class="neaktivna" disabled>Add new</button>
+                                <div class="configButtons">
+                                    <!--onclick: Nenina funkcija-->
+                                    <button type="button" id="startWorkitem" class="neaktivna genButton" disabled>Submit</button>
+                                    <!--onclick: dodaj funkcija - dodaje novi HTML-->
+                                    <button type="button" id="nova" class="neaktivna genButton" disabled>Add new</button>
+                                </div>
                             </fieldset>
                         </form>
                     </div>

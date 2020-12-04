@@ -13,7 +13,7 @@ body {
     /*NOVO*/
     transition: background-color .5s; /*da sporije menja pozadinu kad se pojavi side bar*/
 }
-/*ovde mi se čini da ima izmena*/
+
 .navTextArea, #wantedForgeClientID {
     resize: none;
     height: 24px;
@@ -22,17 +22,16 @@ body {
     border: 1px solid black;
     border-radius: 5px;
 }
-    /*NOVO*/
-    .navTextArea::placeholder {
-        text-align: center;
-    }
+
+.navTextArea::placeholder {
+    text-align: center;
+}
 
 .mySideText {
     text-align: center;
     margin: 20px 0;
 }
-/*odnosi se na stare dugmiće za logovanje-
-ako ih brišeš ni .navClient ti neće trebati*/
+
 .navClient {
     line-height: 80px;
 }
@@ -40,7 +39,7 @@ ako ih brišeš ni .navClient ti neće trebati*/
 li {
     list-style: none;
 }
-/*NOVO*/
+
 .sidenav {
     height: 65%;
     width: 0;
@@ -67,11 +66,12 @@ a.closebtn {
     font-weight: bold;
     color: red;
 }
-/*dovde*/
+
 #appBuckets {
     overflow: auto;
     width: 100%;
     height: calc(40vh - 150px);
+    padding: 20px;
 }
 
 #forgeIDsList {
@@ -91,13 +91,12 @@ a.closebtn {
     padding-left: 40px;
 }
 
-/*mislim da je novo ili promenjeno*/
 .loginList {
     padding-top: 30px;
 }
 
 #responseMessage {
-    margin: 20px auto;
+    margin: 20px;
     padding: 10px;
     border: 2px solid gray;
     border-radius: 5px;
@@ -149,16 +148,20 @@ a.closebtn {
     display: block;
 }
 
+fieldset {
+    padding: 0 20px 0 20px;
+}
 
 #selektor {
     width: 100%;
     min-width: 350px;
-    /*border: 3px solid rgb(228, 220, 220);*/
     border-radius: 10px;
 }
 
 .razdela {
-    padding: 0 5px;
+    padding: 2px 0;
+    display: flex;
+    justify-content: space-between;
 }
 
 .naziv {
@@ -170,10 +173,27 @@ label {
     font-weight: bold;
     width: 150px;
     font-size: 15px;
+    margin: 0;
+}
+
+.labelWidth{
+    float: right;
+    text-align: right;
 }
 
 .selekcija {
-    width: 45%;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.inputs, .configButtons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.inputField{
+    width: 35%;
 }
 
 .odabir {
@@ -181,23 +201,21 @@ label {
     height: 2rem;
     border-radius: 5px;
     border: 1px solid black;
-}
-
-.razdela {
-    display: flex;
-    justify-content: space-between;
+    height: 27px;
+    width: 35%;
+    max-width: 120px;
 }
 
 .teksterija {
     width: 165px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     box-sizing: border-box;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .percentum {
-    max-width: 115px;
+    max-width: 100px;
     height: 2rem;
     padding: 0 5px;
     resize: none;
@@ -205,18 +223,24 @@ label {
     text-align: center;
     line-height: 2rem;
     overflow: hidden;
+    height: 27px;
 }
 
-#startWorkitem, #nova, .buttonsForRegistration {
+.genButton {
     background-color: #5bc0de;
     color: white;
-    height: 25px;
+    height: 27px;
     border-radius: 5px;
-    margin: 12px 5px 0 5px;
-    float: left;
+    margin: 0px 10px 10px 0px;
 }
-/*NOVO*/
-.buttonsForRegistration {
+
+#startWorkitem, #nova {    
+    width: 35%;
+}
+
+.buttonsForRegistration {    
+    width: 7%;
+    min-width: 100px;    
     float: right;
     margin-top: 0;
 }
@@ -261,6 +285,7 @@ button#logInButton, #subButton {
 .brisanje {
     width: 27px;
     height: 27px;
+    margin-left: 10px;
 }
 
 .zaBrisanje {

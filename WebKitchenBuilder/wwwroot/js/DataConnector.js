@@ -55,7 +55,7 @@ function encriptPassword(pass) {
     return encPas;
 }
 
-const resultFromDatabase;
+var resultFromDatabase = {};
 
 function loginUser() {
     writeLog("Login existing user");
@@ -73,7 +73,7 @@ function loginUser() {
             writeLog('Login passed successfully');
             resultFromDatabase = res;
             document.getElementById("loginInfo").innerHTML = 'Log was successfull. Please choose Forge client.';
-            var listOfForgeClients = '';
+            var listOfForgeClients = document.getElementById("wantedForgeClientID").innerHTML;
             res.forEach(function (user) {
                 listOfForgeClients += '<option>' + user.forgeClient + '</option>';
             });
@@ -104,12 +104,12 @@ function forgeClientChanged() {
 }
 
 function sendCred(input) {
-    jquery.post({
+    $.post({
         url: 'api/forge/oauth/cred',
         contentType: 'application/json',
         data: JSON.stringify({
             ForgeClient: input.forgeClient,
-            ForgeSecret: input.forgeSectet
+            ForgeSecret: input.forgeSecret
         })
     });    
 }

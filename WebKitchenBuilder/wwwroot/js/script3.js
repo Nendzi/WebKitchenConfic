@@ -183,23 +183,23 @@ function dodajFunkcija() {
     var ostatak = ostatakIzračunavanje()[0];
     document.getElementById("dodatak" + i).innerHTML += '<span>' +
         '<div id="podela' + i + '" class="razdela">' +
-        '<select name="elementi" id="elementi' + i + '" class="odabir">' +
-        '<option value="closed">Closed</option>' +
-        '<option value="open">Open</option>' +
-        '<option value="drawer">Drawer</option>' +
-        '<option value="doubleDoor">Double door</option>' +
-        '<option value="leftDoor">Left door</option>' +
-        '<option value="rightdoor">Right door</option>' +
-        '<option value="cassette">Cassette</option>' +
-        '</select>' +
-        '<div class="teksterija">' +
-        '<textarea class="percentum"' + 'id="procenti' + i + '" name="unos' + i +
-        '" placeholder = " Left ' + ostatak + '%" ' +
-        'onkeydown="proveraFunkcija(event, this)" oninput="naUnos(this)"></textarea>' +
-        '<div class="brisanje">' +
-        '<button type="button" class = "zaBrisanje" id="brisanje' + i + '" onclick="obrisatiFunkcija(this)">&#9587</button>' +
-        '</div>' +
-        '</div>' +
+            '<select name="elementi" id="elementi' + i + '" class="odabir">' +
+                '<option value="closed">Closed</option>' +
+                '<option value="open">Open</option>' +
+                '<option value="drawer">Drawer</option>' +
+                '<option value="doubleDoor">Double door</option>' +
+                '<option value="leftDoor">Left door</option>' +
+                '<option value="rightdoor">Right door</option>' +
+                '<option value="cassette">Cassette</option>' +
+            '</select>' +
+            '<div class="teksterija">' +
+                '<textarea class="percentum"' + 'id="procenti' + i + '" name="unos' + i +
+                '" placeholder = " Left ' + ostatak + '%" ' +
+                'onkeydown="proveraFunkcija(event, this)" oninput="naUnos(this)"></textarea>' +
+                '<div class="brisanje">' +
+                    '<button type="button" class = "zaBrisanje" id="brisanje' + i + '" onclick="obrisatiFunkcija(this)">&#9587</button>' +
+                '</div>' +
+            '</div>' +
         '</div>' +
         '</span>' +
         '<div id="dodatak' + j + '"></div>'
