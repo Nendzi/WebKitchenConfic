@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>View Models - Autodesk Forge</title>
+    <title>Kitchen Configurator</title>
     <meta charset="utf-8" />
 
     <!-- Common packages: jQuery, Bootstrap, jsTree -->
@@ -27,7 +27,6 @@
     <script src="/js/ModelBrowserUtility.js"></script>
     <!-- .NET SignalR -->
     <script src="//unpkg.com/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script>
-
 </head>
 <body>
     <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
@@ -44,6 +43,7 @@
             <div class="registrationButtons">
                 <button type="button" class="buttonsForRegistration genButton" id="clientID" onclick="openNavLogin()">Log in</button>
                 <button type="button" class="buttonsForRegistration genButton" id="clientSecret" onclick="openNavSignin()">Sign in</button>
+                <span id="logedUserName"></span>
             </div>
         </div>
         <!--OVO JE MENJANO-->
@@ -74,7 +74,7 @@
                 </li>
             </ul>
             <div class="flexConteinerBtn">
-                <button type="submit" id="subButton" class="buttonsForRegistration">Submit</button>
+                <button type="submit" id="subButton" class="buttonsForRegistration genButton">Submit</button>
             </div>
             <p id="addingNewUserInfo"></p>
         </div>
@@ -96,7 +96,7 @@
                 </ul>
             </div>
             <div class="flexConteinerBtn">
-                <button type="submit" id="logInButton" class="buttonsForRegistration">Log in</button>
+                <button type="submit" id="logInButton" class="buttonsForRegistration genButton">Log in</button>
             </div>
             <p id="loginInfo"></p>
             <div id="forgeIDsList">
@@ -132,29 +132,29 @@
                                     <label for="elementi">Choose front type:</label>
                                     <label class="labelWidth" for="procenti">Element heigth [%]:</label>
                                 </div>
-                                
-                                    <div id="podela" class="razdela">
-                                        <select name="elementi" id="elementi" class="odabir">
-                                            <option value="closed">Closed</option>
-                                            <option value="open">Open</option>
-                                            <option value="drawer">Drawer</option>
-                                            <option value="doubleDoor">Double door</option>
-                                            <option value="leftDoor">Left door</option>
-                                            <option value="rightDoor">Right door</option>
-                                            <option value="cassette">Cassette</option>
-                                        </select>
 
-                                        <div class="teksterija">
-                                            <!--oninput: izmena funkcija - menja aktivno/neaktivno stanje dugmeta-->
-                                            <textarea class="percentum" id="procenti" name="unos" placeholder="Left 100%" onkeydown="proveraFunkcija(event, this)" oninput="naUnos(this)"></textarea>
-                                            <div class="brisanje">
-                                                <!--u prvom učitavanju ne treba dugme za brisanje-->
-                                            </div>
+                                <div id="podela" class="razdela">
+                                    <select name="elementi" id="elementi" class="odabir">
+                                        <option value="closed">Closed</option>
+                                        <option value="open">Open</option>
+                                        <option value="drawer">Drawer</option>
+                                        <option value="doubleDoor">Double door</option>
+                                        <option value="leftDoor">Left door</option>
+                                        <option value="rightDoor">Right door</option>
+                                        <option value="cassette">Cassette</option>
+                                    </select>
+
+                                    <div class="teksterija">
+                                        <!--oninput: izmena funkcija - menja aktivno/neaktivno stanje dugmeta-->
+                                        <textarea class="percentum" id="procenti" name="unos" placeholder="Left 100%" onkeydown="proveraFunkcija(event, this)" oninput="naUnos(this)"></textarea>
+                                        <div class="brisanje">
+                                            <!--u prvom učitavanju ne treba dugme za brisanje-->
                                         </div>
                                     </div>
-                                
+                                </div>
+
                                 <!--mesto gde se dodaje novi deo forme-->
-                                <div id="dodatak1"></div>
+                                <div id="podela1" class="razdela"></div>
 
                                 <p id="poruka">Input procentage</p>
                                 <p id="poruka2">Invalid input, overflow of 100%</p>
@@ -174,12 +174,12 @@
                 </div>
             </div>
 
-            <div class="col-sm-9 fill">
-                <div id="forgeViewer"></div>
+            <div class="col-sm-9 fill" id="forgeViewerVisibility">
+                <div id="forgeViewer"></div><!-- ovde se nalazi vjuver -->
             </div>
 
-            <div class="col-sm-9" id="outputWindow">
-                <pre id="outputlog" style="height: calc(100vh - 120px); overflow-y: scroll;"></pre>
+            <div class="col-sm-9 fill" id="outputWindowVisibility">
+                <div id="outputWindow"></div><!-- Ovde se nalazi izveštaj -->
             </div>
 
             <form id="uploadFile" method='post' enctype="multipart/form-data">

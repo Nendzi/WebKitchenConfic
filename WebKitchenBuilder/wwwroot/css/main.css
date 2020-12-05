@@ -84,7 +84,20 @@ a.closebtn {
 }
 
 #forgeViewer {
+    width: 100%;    
+}
+
+#outputWindow {
     width: 100%;
+    overflow-y: scroll;
+}
+
+#forgeViewerVisibility {
+    display: none;
+}
+
+#outputWindowVisibility{
+    display: initial;
 }
 
 #loginInfo {
@@ -97,9 +110,10 @@ a.closebtn {
 
 #responseMessage {
     margin: 20px;
-    padding: 10px;
+    padding: 0 10px;
     border: 2px solid gray;
     border-radius: 5px;
+    height: 27px;
 }
 
 .myAwesomeExtensionIcon {
@@ -165,7 +179,7 @@ fieldset {
 }
 
 .naziv {
-    padding: 3px 10px;
+    padding: 3px 0px;
     background-color: #f5f5f5;
 }
 
@@ -231,7 +245,7 @@ label {
     color: white;
     height: 27px;
     border-radius: 5px;
-    margin: 0px 10px 10px 0px;
+    margin: 0px 0px 10px 0px;
 }
 
 #startWorkitem, #nova {    
@@ -243,6 +257,12 @@ label {
     min-width: 100px;    
     float: right;
     margin-top: 0;
+}
+
+#logedUserName {
+    float: right;
+    margin-top: 0;
+    margin-right:10px;
 }
 
 .flexConteinerBtn {

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    document.getElementById("nova").addEventListener("click", dodajFunkcija);
+    document.getElementById("nova").addEventListener("click", dodajGrupu);
 });
 
 /*Brojač - prebraja koliko je puta dodat novi element*/
@@ -13,17 +13,14 @@ function proveraFunkcija(event, objProvera) {
     if (tipka > 47 && tipka < 58) {
         document.getElementById("poruka").style.display = "none";
         dodajAktivno();
-
     }
     else if (tipka > 95 && tipka < 106) {
         document.getElementById("poruka").style.display = "none";
         dodajAktivno();
-
     }
     else if (tipka == 46) {
         document.getElementById("poruka").style.display = "none";
         dodajAktivno();
-
     }
     else if (tipka == 8) {
         document.getElementById("poruka").style.display = "none";
@@ -33,13 +30,10 @@ function proveraFunkcija(event, objProvera) {
         document.getElementById("poruka").style.display = "block";
         dodajNeAktivno();
         proslediNeAktivno();
-
         /*briše staro polje _(celo) i dodaje novo polje*/
         var polje = document.getElementById(objProvera.id).parentNode;
         polje.innerHTML += document.getElementById(objProvera.id).innerHTML;
         /*ponovo izračunati procente*/
-        /* NAĆI ZAŠTO NE RAČUNA OSTATAK SA SVIM POLJIMA*/
-
         var ar = ostatakIzračunavanje()[2];
         var dar = ar.length;
         ispravljeniOstatak();
@@ -47,7 +41,6 @@ function proveraFunkcija(event, objProvera) {
         for (let ind = 0; ind < dar; ind++) {
             document.getElementsByClassName("percentum")[ind].setAttribute("placeholder", "Prostalo je " + količnik.toPrecision(4) + "%");
         }
-
         var suma = ostatakIzračunavanje()[1];
         if (suma == 100 || suma < 100) {
             document.getElementById("poruka2").style.display = "none";
@@ -61,22 +54,22 @@ function proveraFunkcija(event, objProvera) {
 function dodajAktivno() {
     var nov = document.getElementById("nova");
     nov.disabled = false;
-    nov.className = "aktivna"
+    nov.className = "aktivna genButton"
 }
 function dodajNeAktivno() {
     var nov = document.getElementById("nova");
     nov.disabled = true;
-    nov.className = "neaktivna"
+    nov.className = "neaktivna genButton"
 }
 function proslediAktivno() {
     var pros = document.getElementById("startWorkitem");
     pros.disabled = false;
-    pros.className = "aktivna";
+    pros.className = "aktivna genButton";
 }
 function proslediNeAktivno() {
     var pros = document.getElementById("startWorkitem");
     pros.disabled = true;
-    pros.className = "neaktivna";
+    pros.className = "neaktivna genButton";
 }
 /*funkcija za filtriranje niza UF BREEE!*/
 function filterNiza(value) {
@@ -176,22 +169,22 @@ function naUnos(objUnos) {
     }
 }
 /*funkcija za dodavanje HTML*/
-function dodajFunkcija() {
+function dodajGrupu() {
     dodajNeAktivno();
     var i = add();
     var j = 1 + i;
     var ostatak = ostatakIzračunavanje()[0];
-    document.getElementById("dodatak" + i).innerHTML += '<span>' +
+    document.getElementById("podela" + i).outerHTML =
         '<div id="podela' + i + '" class="razdela">' +
-            '<select name="elementi" id="elementi' + i + '" class="odabir">' +
-                '<option value="closed">Closed</option>' +
-                '<option value="open">Open</option>' +
-                '<option value="drawer">Drawer</option>' +
-                '<option value="doubleDoor">Double door</option>' +
-                '<option value="leftDoor">Left door</option>' +
-                '<option value="rightdoor">Right door</option>' +
-                '<option value="cassette">Cassette</option>' +
-            '</select>' +
+                '<select name="elementi" id="elementi' + i + '" class="odabir">' +
+                    '<option value="closed">Closed</option>' +
+                    '<option value="open">Open</option>' +
+                    '<option value="drawer">Drawer</option>' +
+                    '<option value="doubleDoor">Double door</option>' +
+                    '<option value="leftDoor">Left door</option>' +
+                    '<option value="rightdoor">Right door</option>' +
+                    '<option value="cassette">Cassette</option>' +
+                '</select>' +
             '<div class="teksterija">' +
                 '<textarea class="percentum"' + 'id="procenti' + i + '" name="unos' + i +
                 '" placeholder = " Left ' + ostatak + '%" ' +
@@ -201,11 +194,9 @@ function dodajFunkcija() {
                 '</div>' +
             '</div>' +
         '</div>' +
-        '</span>' +
-        '<div id="dodatak' + j + '"></div>'
+    '<div id="podela' + j + '" class="razdela"></div>';
 }
-/*funkcija za brisanje nepotrebnog polja
-vraća i potrebno za menjanje id-eva*/
+/*funkcija za brisanje nepotrebnog polja vraća i potrebno za menjanje id-eva*/
 function obrisatiFunkcija(objBrisanje) {
     /*dobija se vrednost id dugmeta koje je pritisnuto*/
     var indeks = objBrisanje.id;
@@ -225,7 +216,7 @@ function obrisatiFunkcija(objBrisanje) {
         var količnik = ispravljeniOstatak()[0];
         console.log(količnik);
         for (let ind = 0; ind < dar; ind++) {
-            document.getElementsByClassName("percentum")[ind].setAttribute("placeholder", "Prostalo je " + količnik.toPrecision(4) + "%");
+            document.getElementsByClassName("percentum")[ind].setAttribute("placeholder", "Left " + količnik.toPrecision(4) + "%");
         }
         dodajNeAktivno();
     }

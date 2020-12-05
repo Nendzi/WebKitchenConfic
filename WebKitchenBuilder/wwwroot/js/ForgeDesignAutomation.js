@@ -20,12 +20,7 @@ $(document).ready(function () {
     $('#startWorkitem').click(startWorkitem);
     $('#forgeViewer').click(animateSelectedElement);
 
-    $("#forgeViewer").css("display", "block");
-    $("#outputWindow").css("display", "none");
-
     startConnection();
-    prepareBucket();
-    createAppBundleActivity();
 });
 
 function prepareLists() { }
@@ -110,8 +105,8 @@ function createActivity(cb) {
 }
 
 function startWorkitem() {
-    $("#forgeViewer").css("display", "none");
-    $("#outputWindow").css("display", "block");
+    $("#forgeViewerVisibility").css("display", "none");
+    $("#outputWindowVisibility").css("display", "initial");
     writeLog("Starting Workitem");
     startConnection(function () {
         var formData = new FormData();
@@ -128,21 +123,20 @@ function startWorkitem() {
             }
         });        
     });
-    $("#forgeViewer").css("display", "block");
-    $("#outputWindow").css("display", "none");
+    
 }
 
 function writeLog(text) {
     console.log(text);
-    $('#outputlog').append('<div style="border-top: 1px dashed #C0C0C0">' + text + '</div>');
-    var elem = document.getElementById('outputlog');
+    $('#outputWindow').append('<p style="border-top: 1px dashed #C0C0C0">' + text + '</p>');
+    var elem = document.getElementById('outputWindow');
     elem.scrollTop = elem.scrollHeight;
 }
 
 var connection;
 var connectionId;
 
-function startConnection(onReady) {
+function startConnection(onReady) {    
     if (connection && connection.connectionState) { if (onReady) onReady(); return; }
     connection = new signalR.HubConnectionBuilder().withUrl("/api/signalr/designautomation").build();
     connection.start()
@@ -154,11 +148,10 @@ function startConnection(onReady) {
                 });
         });
 
-    connection.on("downloadResult", function (url) {
-        writeLog('<a href="' + url +'">Download result file here</a>');
-    });
-
     connection.on("onComplete", function (message) {
         writeLog(message);
-    });
+        $('#appBuckets').jstree(true).refresh();
+        $("#forgeViewerVisibility").css("display", "initial");
+        $("#outputWindowVisibility").css("display", "none");
+            });
 }

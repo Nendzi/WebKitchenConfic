@@ -8,10 +8,6 @@
         createNewBucket();
     });
 
-    $('#createBucketModal').on('shown.bs.modal', function () {
-        $("#newBucketKey").focus();
-    })
-
     $('#hiddenUploadField').change(function () {
         var node = $('#appBuckets').jstree(true).get_selected(true)[0];
         var _this = this;
@@ -117,6 +113,7 @@ function prepareAppBucketTree() {
         // moj dodatak za prikazivanje zip fajla
         else if (data != null && data.node != null && data.node.type == 'zipfile') {
             $("#forgeViewer").empty();
+            document.getElementById('responseMessage').innerHTML = '';
             var urn = data.node.id;
             getForgeToken(function (access_token) {
                 jQuery.ajax({

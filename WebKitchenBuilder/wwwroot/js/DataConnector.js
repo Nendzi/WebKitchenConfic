@@ -73,6 +73,7 @@ function loginUser() {
             writeLog('Login passed successfully');
             resultFromDatabase = res;
             document.getElementById("loginInfo").innerHTML = 'Log was successfull. Please choose Forge client.';
+            document.getElementById("logedUserName").innerHTML = $('#loginEmailAddress').val();
             var listOfForgeClients = document.getElementById("wantedForgeClientID").innerHTML;
             res.forEach(function (user) {
                 listOfForgeClients += '<option>' + user.forgeClient + '</option>';
@@ -99,6 +100,11 @@ function forgeClientChanged() {
             selectedCred.forgeSecret = user.forgeSecret
             sendCred(selectedCred);
             prepareAppBucketTree();
+            prepareBucket();
+            createAppBundleActivity();
+            $("#forgeViewerVisibility").css("display", "initial");
+            $("#outputWindowVisibility").css("display", "none");
+            closeNavLogin();
         }
     })
 }
