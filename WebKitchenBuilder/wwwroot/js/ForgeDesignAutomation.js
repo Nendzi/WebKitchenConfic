@@ -23,7 +23,8 @@ $(document).ready(function () {
     startConnection();
 });
 
-function prepareLists() { }
+function prepareLists() {
+}
 
 function clearAccount() {
     if (!confirm('Clear existing activities & appbundles before start. ' +
@@ -51,6 +52,7 @@ function prepareBucket() {
         }),
         success: function () {
             writeLog('Bucket kitchenconfig is created')
+            $('#appBuckets').jstree(true).refresh();
         }
     });
 }
@@ -68,6 +70,7 @@ function createAppBundleActivity() {
             })
         });
     });
+
 }
 
 function createAppBundle(cb) {
@@ -107,6 +110,7 @@ function createActivity(cb) {
 function startWorkitem() {
     $("#forgeViewerVisibility").css("display", "none");
     $("#outputWindowVisibility").css("display", "initial");
+    document.getElementById('outputWindowVisibility').innerHTML = '';
     writeLog("Starting Workitem");
     startConnection(function () {
         var formData = new FormData();
@@ -121,9 +125,9 @@ function startWorkitem() {
             success: function (res) {
                 writeLog('Workitem started: ' + res.workItemId);
             }
-        });        
+        });
     });
-    
+
 }
 
 function writeLog(text) {
@@ -136,7 +140,7 @@ function writeLog(text) {
 var connection;
 var connectionId;
 
-function startConnection(onReady) {    
+function startConnection(onReady) {
     if (connection && connection.connectionState) { if (onReady) onReady(); return; }
     connection = new signalR.HubConnectionBuilder().withUrl("/api/signalr/designautomation").build();
     connection.start()
@@ -153,5 +157,5 @@ function startConnection(onReady) {
         $('#appBuckets').jstree(true).refresh();
         $("#forgeViewerVisibility").css("display", "initial");
         $("#outputWindowVisibility").css("display", "none");
-            });
+    });
 }

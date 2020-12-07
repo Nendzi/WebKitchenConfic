@@ -16,9 +16,9 @@ body {
 
 .navTextArea, #wantedForgeClientID {
     resize: none;
-    height: 24px;
+    height: 27px;
     width: 280px;
-    margin: 15px auto;
+    margin: 28px 10px 28px 0; /* bilo je 15px auto*/
     border: 1px solid black;
     border-radius: 5px;
 }

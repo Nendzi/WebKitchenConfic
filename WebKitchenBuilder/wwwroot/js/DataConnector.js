@@ -1,7 +1,8 @@
 ﻿$(document).ready(function () {
-    $('#subButton').click(addNewUser);
-    $('#logInButton').click(loginUser);
-    $("#wantedForgeClientID").change(forgeClientChanged);
+    //$('#subButton').click(addNewUser);
+    //$('#logInButton').click(loginUser);
+    $('#clientID').click(instantLogin);
+    //$("#wantedForgeClientID").change(forgeClientChanged);
 })
 
 function addNewUser() {    
@@ -99,11 +100,6 @@ function forgeClientChanged() {
             selectedCred.forgeClient = user.forgeClient;
             selectedCred.forgeSecret = user.forgeSecret
             sendCred(selectedCred);
-            prepareAppBucketTree();
-            prepareBucket();
-            createAppBundleActivity();
-            $("#forgeViewerVisibility").css("display", "initial");
-            $("#outputWindowVisibility").css("display", "none");
             closeNavLogin();
         }
     })
@@ -116,6 +112,20 @@ function sendCred(input) {
         data: JSON.stringify({
             ForgeClient: input.forgeClient,
             ForgeSecret: input.forgeSecret
-        })
+        }),
+        success: function () {
+            prepareAppBucketTree();
+            prepareBucket();
+            createAppBundleActivity();
+            $("#forgeViewerVisibility").css("display", "initial");
+            $("#outputWindowVisibility").css("display", "none");
+        }
     });    
+}
+
+function instantLogin() {
+    selectedCred.forgeClient = document.getElementById("forgeClientID").value;
+    selectedCred.forgeSecret = document.getElementById("forgeClientSecret").value;
+
+    sendCred(selectedCred);
 }
