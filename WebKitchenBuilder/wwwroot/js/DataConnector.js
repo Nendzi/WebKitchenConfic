@@ -1,11 +1,4 @@
-﻿$(document).ready(function () {
-    //$('#subButton').click(addNewUser);
-    //$('#logInButton').click(loginUser);
-    $('#clientID').click(instantLogin);
-    //$("#wantedForgeClientID").change(forgeClientChanged);
-})
-
-function addNewUser() {    
+﻿function addNewUser() {    
     writeLog("Adding new user");
     var pass1 = document.getElementById("userPassword");
     var pass2 = document.getElementById("userConformedPassword");
@@ -113,7 +106,7 @@ function sendCred(input) {
             ForgeClient: input.forgeClient,
             ForgeSecret: input.forgeSecret
         }),
-        success: function () {
+        success: function () {            
             prepareAppBucketTree();
             prepareBucket();
             createAppBundleActivity();

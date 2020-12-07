@@ -16,29 +16,18 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-$(document).ready(function () {
-    $('#startWorkitem').click(startWorkitem);
-    $('#forgeViewer').click(animateSelectedElement);
-
-    startConnection();
-});
-
 function prepareLists() {
 }
 
-function clearAccount() {
-    if (!confirm('Clear existing activities & appbundles before start. ' +
-        'This is useful if you believe there are wrong settings on your account.' +
-        '\n\nYou cannot undo this operation. Proceed?')) return;
-
-    jQuery.ajax({
-        url: 'api/forge/designautomation/account',
-        method: 'DELETE',
-        success: function () {
-            prepareLists();
-            writeLog('Account cleared, all appbundles & activities deleted');
-        }
-    });
+function clearAccount() {    
+    //jQuery.ajax({
+    //    url: 'api/forge/designautomation/account',
+    //    method: 'DELETE',
+    //    success: function () {
+    //        prepareLists();
+    //        writeLog('Account cleared, all appbundles & activities deleted');
+    //    }
+    //});
 }
 
 function prepareBucket() {
@@ -61,8 +50,8 @@ function defineActivityModal() {
     $("#defineActivityModal").modal();
 }
 
-function createAppBundleActivity() {
-    startConnection(function () {
+function createAppBundleActivity() {    
+    startConnection(function () {        
         writeLog("Defining appbundle and activity for " + "Autodesk.Inventor+2021");
         createAppBundle(function () {
             createActivity(function () {
@@ -70,7 +59,6 @@ function createAppBundleActivity() {
             })
         });
     });
-
 }
 
 function createAppBundle(cb) {
@@ -110,7 +98,7 @@ function createActivity(cb) {
 function startWorkitem() {
     $("#forgeViewerVisibility").css("display", "none");
     $("#outputWindowVisibility").css("display", "initial");
-    document.getElementById('outputWindowVisibility').innerHTML = '';
+    document.getElementById('outputWindow').innerHTML = '';
     writeLog("Starting Workitem");
     startConnection(function () {
         var formData = new FormData();
@@ -124,10 +112,12 @@ function startWorkitem() {
             type: 'POST',
             success: function (res) {
                 writeLog('Workitem started: ' + res.workItemId);
+            },
+            error: function (err) {
+                writeLog('Error has happend: ' + err);
             }
         });
     });
-
 }
 
 function writeLog(text) {

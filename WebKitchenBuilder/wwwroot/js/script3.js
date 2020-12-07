@@ -1,6 +1,3 @@
-$(document).ready(function () {
-    document.getElementById("nova").addEventListener("click", dodajGrupu);
-});
 
 /*Brojač - prebraja koliko je puta dodat novi element*/
 var add = (function () {
@@ -182,7 +179,7 @@ function dodajGrupu() {
                     '<option value="drawer">Drawer</option>' +
                     '<option value="doubleDoor">Double door</option>' +
                     '<option value="leftDoor">Left door</option>' +
-                    '<option value="rightdoor">Right door</option>' +
+                    '<option value="rightDoor">Right door</option>' +
                     '<option value="cassette">Cassette</option>' +
                 '</select>' +
             '<div class="teksterija">' +
