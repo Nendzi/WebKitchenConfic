@@ -19,15 +19,14 @@
 function prepareLists() {
 }
 
-function clearAccount() {    
-    //jQuery.ajax({
-    //    url: 'api/forge/designautomation/account',
-    //    method: 'DELETE',
-    //    success: function () {
-    //        prepareLists();
-    //        writeLog('Account cleared, all appbundles & activities deleted');
-    //    }
-    //});
+function clearAccount() {
+    jQuery.ajax({
+        url: 'api/forge/designautomation/account',
+        method: 'DELETE',
+        success: function () {
+            writeLog('Account cleared, all appbundles & activities deleted');
+        }
+    });
 }
 
 function prepareBucket() {
@@ -46,12 +45,8 @@ function prepareBucket() {
     });
 }
 
-function defineActivityModal() {
-    $("#defineActivityModal").modal();
-}
-
-function createAppBundleActivity() {    
-    startConnection(function () {        
+function createAppBundleActivity() {
+    startConnection(function () {
         writeLog("Defining appbundle and activity for " + "Autodesk.Inventor+2021");
         createAppBundle(function () {
             createActivity(function () {
@@ -117,7 +112,13 @@ function startWorkitem() {
                 writeLog('Error has happend: ' + err);
             }
         });
-    });
+    }, function (msg) { swapBoardToViewer(); });
+}
+
+function swapBoardToViewer() {
+    $('#appBuckets').jstree(true).refresh();
+    $("#forgeViewerVisibility").css("display", "initial");
+    $("#outputWindowVisibility").css("display", "none");
 }
 
 function writeLog(text) {
@@ -131,8 +132,13 @@ var connection;
 var connectionId;
 
 function startConnection(onReady) {
-    if (connection && connection.connectionState) { if (onReady) onReady(); return; }
+    
+    if (connection && connection.connectionState) {
+        if (onReady) onReady();
+        return;
+    }
     connection = new signalR.HubConnectionBuilder().withUrl("/api/signalr/designautomation").build();
+
     connection.start()
         .then(function () {
             connection.invoke('getConnectionId')
@@ -141,6 +147,10 @@ function startConnection(onReady) {
                     if (onReady) onReady();
                 });
         });
+
+    connection.on("downloadResult", function (url) {
+        writeLog('<a href="' + url + '">Download result file here</a>');
+    });
 
     connection.on("onComplete", function (message) {
         writeLog(message);

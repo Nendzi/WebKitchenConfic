@@ -106,12 +106,12 @@ function sendCred(input) {
             ForgeClient: input.forgeClient,
             ForgeSecret: input.forgeSecret
         }),
-        success: function () {            
-            prepareAppBucketTree();
+        success: function () {
+            $("#forgeViewerVisibility").css("display", "none");
+            $("#outputWindowVisibility").css("display", "initial");
             prepareBucket();
+            prepareAppBucketTree();
             createAppBundleActivity();
-            $("#forgeViewerVisibility").css("display", "initial");
-            $("#outputWindowVisibility").css("display", "none");
         }
     });    
 }
@@ -119,6 +119,5 @@ function sendCred(input) {
 function instantLogin() {
     selectedCred.forgeClient = document.getElementById("forgeClientID").value;
     selectedCred.forgeSecret = document.getElementById("forgeClientSecret").value;
-
     sendCred(selectedCred);
 }

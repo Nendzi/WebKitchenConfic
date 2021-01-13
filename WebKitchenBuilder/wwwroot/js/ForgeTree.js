@@ -1,22 +1,4 @@
-﻿function createNewBucket() {
-    var bucketKey = $('#newBucketKey').val();
-    jQuery.post({
-        url: '/api/forge/oss/buckets',
-        contentType: 'application/json',
-        data: JSON.stringify({ 'bucketKey': bucketKey }),
-        success: function (res) {
-            $('#appBuckets').jstree(true).refresh();
-            $('#createBucketModal').modal('toggle');
-        },
-        error: function (err) {
-            if (err.status == 409)
-                alert('Bucket already exists - 409: Duplicated')
-            console.log(err);
-        }
-    });
-}
-
-function prepareAppBucketTree() {
+﻿function prepareAppBucketTree() {
     $('#appBuckets').jstree({
         'core': {
             'themes': { "icons": true },
@@ -83,10 +65,16 @@ function prepareAppBucketTree() {
                     url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
                     headers: { 'Authorization': 'Bearer ' + access_token },
                     success: function (res) {
-                        if (res.status === 'success') launchViewer(urn);
+                        if (res.status === 'success') {
+                            $("#forgeViewerVisibility").css("display", "initial");
+                            $("#outputWindowVisibility").css("display", "none");
+                            launchViewer(urn);
+                        }
                         else $("#forgeViewer").html('The translation job still running: ' + res.progress + '. Please try again in a moment.');
                     },
                     error: function (err) {
+                        $("#forgeViewerVisibility").css("display", "initial");
+                        $("#outputWindowVisibility").css("display", "none");
                         var msgButton = 'This file is not translated yet! ' +
                             '<button class="btn btn-xs btn-info" onclick="translateObject()"><span class="glyphicon glyphicon-eye-open"></span> ' +
                             'Start translation</button>'
@@ -97,6 +85,7 @@ function prepareAppBucketTree() {
         }
     });
 }
+
 
 function autodeskCustomMenu(autodeskNode) {
     var items;

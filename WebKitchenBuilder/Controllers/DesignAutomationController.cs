@@ -60,7 +60,7 @@ namespace WebKitchenBuilder.Controllers
         // Activity name
         public string ActivityName { get { return "KitchenConfig"; } }
         /// Prefix for AppBundles and Activities
-        public static string NickName { get { return OAuthController.GetAppSetting("FORGE_CLIENT_ID"); } }
+        public static string NickName { get { return OAuthController.FORGE_CLIENT_ID; } }
         /// Alias for the app (e.g. DEV, STG, PROD). This value may come from an environment variable
         public static string Alias { get { return "dev"; } }
         // bucket name
@@ -320,7 +320,8 @@ namespace WebKitchenBuilder.Controllers
             // the callback contains the connectionId (used to identify the client) and the outputFileName of this workitem
             string callbackUrl = string.Format(
                 "{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}",
-                OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),
+                /*OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),*/
+                "http://nedeljko-001-site1.etempurl.com",
                 browerConnectionId, outputFileNameOSS
                 );
             WorkItem workItemSpec = new WorkItem()

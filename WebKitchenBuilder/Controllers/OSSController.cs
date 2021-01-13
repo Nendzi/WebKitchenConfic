@@ -35,7 +35,7 @@ namespace WebKitchenBuilder.Controllers
     {
         private IWebHostEnvironment _env;
         public OSSController(IWebHostEnvironment env) { _env = env; }
-        public string ClientId { get { return OAuthController.GetAppSetting("FORGE_CLIENT_ID").ToLower(); } }
+        public string ClientId { get { return OAuthController.FORGE_CLIENT_ID.ToLower(); } }
         // BucketName
         public string BucketName { get { return "kitchenconfig"; } }
 
@@ -116,16 +116,37 @@ namespace WebKitchenBuilder.Controllers
         /// </summary>
         [HttpPost]
         [Route("api/forge/oss/buckets")]
-        public async Task<dynamic> CreateBucket([FromBody] BucketModel bucket)
+        public async Task<dynamic> CreateNewBucket([FromBody] BucketModel bucket) 
         {
+            dynamic bucketOutput = null; ;
             BucketsApi buckets = new BucketsApi();
             dynamic token = await OAuthController.GetInternalAsync();
             buckets.Configuration.AccessToken = token.access_token;
             PostBucketsPayload bucketPayload = new PostBucketsPayload(string.Format("{0}-{1}", ClientId, bucket.bucketKey.ToLower()), null,
               PostBucketsPayload.PolicyKeyEnum.Transient);
-            return await buckets.CreateBucketAsync(bucketPayload, "US");
+            // obavezna je provera da li kanta već postoji!!!
+            try
+            {
+                bucketOutput = await buckets.CreateBucketAsync(bucketPayload, "US");
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Error calling CreateBucket: {\"reason\":\"Bucket already exists\"}")
+                {
+                    dynamic allBuckets = await buckets.GetBucketsAsync("US", 100);
+                    foreach (KeyValuePair<string, dynamic> actualBucket in new DynamicDictionaryItems(allBuckets.items))
+                    {
+                        string bucketName = actualBucket.Value.bucketKey;
+                        if (bucketName.Contains(BucketName)) //kitchenconfig  designautomation
+                        {
+                            bucketOutput = actualBucket;
+                        }
+                    }
+                }                
+            }
+            return bucketOutput;
         }
-
+        
         /// <summary>
         /// Delete selected bucket 
         /// </summary>
@@ -202,7 +223,7 @@ namespace WebKitchenBuilder.Controllers
                 dynamic result = await objects.CreateSignedResourceAsync(bucketKey, fileToDownload, postBucketsSigned);
                 return result;
             }
-            catch (Exception ex) {  }
+            catch (Exception ex) { }
 
             return null;
         }
