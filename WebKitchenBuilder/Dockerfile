@@ -8,8 +8,8 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
+
 COPY ["WebKitchenBuilder.csproj", ""]
-COPY ["../../../MongoDB/MongoDBLibrary/MongoDBLibrary.csproj", "../../../MongoDB/MongoDBLibrary/"]
 RUN dotnet restore "./WebKitchenBuilder.csproj"
 COPY . .
 WORKDIR "/src/."
