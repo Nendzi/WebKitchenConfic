@@ -120,8 +120,11 @@ namespace WebKitchenBuilder.Controllers
             }
 
             // get defined app bundles
-            Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();
-            return Ok(new { AppBundle = "Return from line ", Version = "124" });
+            if (_designAutomation == null)
+            {
+                return Ok(new { AppBundle = "Return from line ", Version = "124" });
+            }
+            Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();            
 
             // check if app bundle is already define
             dynamic newAppVersion;
