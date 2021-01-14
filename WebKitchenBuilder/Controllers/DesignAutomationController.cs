@@ -115,15 +115,10 @@ namespace WebKitchenBuilder.Controllers
             string packageZipPath = Path.Combine(LocalBundlesFolder, ZipFileName);
             if (!System.IO.File.Exists(packageZipPath))
             {
-                return Ok(new { AppBundle = "Appbundle not found at ", Version = packageZipPath });
-                //throw new Exception("Appbundle not found at " + packageZipPath);
+                throw new Exception("Appbundle not found at " + packageZipPath);
             }
 
-            // get defined app bundles
-            if (_designAutomation == null)
-            {
-                return Ok(new { AppBundle = "Return from line ", Version = "124" });
-            }
+            // get defined app bundles - but this line is wrong when running on server not localhost.
             Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();            
 
             // check if app bundle is already define
@@ -142,8 +137,7 @@ namespace WebKitchenBuilder.Controllers
                 newAppVersion = await _designAutomation.CreateAppBundleAsync(appBundleSpec);
                 if (newAppVersion == null)
                 {
-                    return Ok(new { AppBundle = "Cannot create new app ", Version = "I am sorry" });
-                    //throw new Exception("Cannot create new app");
+                    throw new Exception("Cannot create new app");
                 }
 
                 // create alias pointing to v1
@@ -161,8 +155,7 @@ namespace WebKitchenBuilder.Controllers
                 newAppVersion = await _designAutomation.CreateAppBundleVersionAsync(AppBundleName, appBundleSpec);
                 if (newAppVersion == null)
                 {
-                    return Ok(new { AppBundle = "Cannot create new version ", Version = "I am sorry" });
-                    //throw new Exception("Cannot create new version");
+                    throw new Exception("Cannot create new version");
                 }
 
                 // update alias pointing to v+1
