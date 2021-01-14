@@ -41,6 +41,8 @@ function prepareBucket() {
         success: function () {
             writeLog('Bucket kitchenconfig is created')
             $('#appBuckets').jstree(true).refresh();
+            prepareAppBucketTree();
+            createAppBundleActivity();
         }
     });
 }

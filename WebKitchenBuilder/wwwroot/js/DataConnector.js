@@ -110,8 +110,8 @@ function sendCred(input) {
             $("#forgeViewerVisibility").css("display", "none");
             $("#outputWindowVisibility").css("display", "initial");
             prepareBucket();
-            prepareAppBucketTree();
-            createAppBundleActivity();
+            //prepareAppBucketTree();
+            //createAppBundleActivity();
         }
     });    
 }
