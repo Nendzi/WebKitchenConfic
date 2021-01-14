@@ -113,7 +113,11 @@ namespace WebKitchenBuilder.Controllers
         {    
             // check if ZIP with bundle is here
             string packageZipPath = Path.Combine(LocalBundlesFolder, ZipFileName);
-            if (!System.IO.File.Exists(packageZipPath)) throw new Exception("Appbundle not found at " + packageZipPath);
+            if (!System.IO.File.Exists(packageZipPath))
+            {
+                return Ok(new { AppBundle = "Appbundle not found at ", Version = packageZipPath });
+                //throw new Exception("Appbundle not found at " + packageZipPath);
+            }
 
             // get defined app bundles
             Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();
