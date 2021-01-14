@@ -39,8 +39,8 @@ function prepareBucket() {
             bucketKey: 'kitchenconfig'
         }),
         success: function () {
-            writeLog('Bucket kitchenconfig is created')
-            $('#appBuckets').jstree(true).refresh();
+            writeLog('Bucket kitchenconfig is created');
+            //$('#appBuckets').jstree(true).refresh();
             prepareAppBucketTree();
             createAppBundleActivity();
         }
