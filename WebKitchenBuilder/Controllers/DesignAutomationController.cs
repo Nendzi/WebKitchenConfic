@@ -121,11 +121,11 @@ namespace WebKitchenBuilder.Controllers
 
             // get defined app bundles
             Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();
+            return Ok(new { AppBundle = "Return from line ", Version = "124" });
 
             // check if app bundle is already define
             dynamic newAppVersion;
             string qualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias);
-            return Ok(new { AppBundle = "Return from line ", Version = "128" });
             if (!appBundles.Data.Contains(qualifiedAppBundleId))
             {
                 // create an appbundle (version 1)
