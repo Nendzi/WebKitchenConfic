@@ -113,7 +113,6 @@ namespace WebKitchenBuilder.Controllers
         {    
             // check if ZIP with bundle is here
             string packageZipPath = Path.Combine(LocalBundlesFolder, ZipFileName);
-            return Ok(new { AppBundle = "Return from line ", Version = "116" });
             if (!System.IO.File.Exists(packageZipPath))
             {
                 return Ok(new { AppBundle = "Appbundle not found at ", Version = packageZipPath });
@@ -126,6 +125,7 @@ namespace WebKitchenBuilder.Controllers
             // check if app bundle is already define
             dynamic newAppVersion;
             string qualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias);
+            return Ok(new { AppBundle = "Return from line ", Version = "128" });
             if (!appBundles.Data.Contains(qualifiedAppBundleId))
             {
                 // create an appbundle (version 1)
