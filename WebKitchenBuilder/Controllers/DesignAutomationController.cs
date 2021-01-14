@@ -136,7 +136,11 @@ namespace WebKitchenBuilder.Controllers
                     Description = "Creates an kitchen elements based on template files"
                 };
                 newAppVersion = await _designAutomation.CreateAppBundleAsync(appBundleSpec);
-                if (newAppVersion == null) throw new Exception("Cannot create new app");
+                if (newAppVersion == null)
+                {
+                    return Ok(new { AppBundle = "Cannot create new app ", Version = "I am sorry" });
+                    //throw new Exception("Cannot create new app");
+                }
 
                 // create alias pointing to v1
                 Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
@@ -151,7 +155,11 @@ namespace WebKitchenBuilder.Controllers
                     Description = AppBundleName
                 };
                 newAppVersion = await _designAutomation.CreateAppBundleVersionAsync(AppBundleName, appBundleSpec);
-                if (newAppVersion == null) throw new Exception("Cannot create new version");
+                if (newAppVersion == null)
+                {
+                    return Ok(new { AppBundle = "Cannot create new version ", Version = "I am sorry" });
+                    //throw new Exception("Cannot create new version");
+                }
 
                 // update alias pointing to v+1
                 AliasPatch aliasSpec = new AliasPatch()
