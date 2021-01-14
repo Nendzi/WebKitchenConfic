@@ -113,6 +113,7 @@ namespace WebKitchenBuilder.Controllers
         {    
             // check if ZIP with bundle is here
             string packageZipPath = Path.Combine(LocalBundlesFolder, ZipFileName);
+            return Ok(new { AppBundle = "Return from line ", Version = "116" });
             if (!System.IO.File.Exists(packageZipPath))
             {
                 return Ok(new { AppBundle = "Appbundle not found at ", Version = packageZipPath });
