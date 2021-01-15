@@ -6,6 +6,9 @@
     //$('#subButton').click(addNewUser);
     //$('#logInButton').click(loginUser);
     $('#clientID').click(instantLogin);
+
+    // create bundle on click - just for testing purpose. It will be deleted after bug solving
+    $('#createBundle').click(createAppBundle);
     //$("#wantedForgeClientID").change(forgeClientChanged);
 
     // From ForgeTree
