@@ -287,8 +287,8 @@ namespace WebKitchenBuilder.Controllers
             dynamic oauth = await OAuthController.GetInternalAsync();
             
             string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "Kitchen.zip"); // avoid overriding
-            return Ok(new { workItemId = "stop at 290" });
             ObjectsApi objects = new ObjectsApi();
+            return Ok(new { workItemId = "stop at 291" });
             objects.Configuration.AccessToken = oauth.access_token;
             using (StreamReader streamReader = new StreamReader(fileSavePath))
                 await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
