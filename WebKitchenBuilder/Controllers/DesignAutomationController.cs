@@ -288,7 +288,6 @@ namespace WebKitchenBuilder.Controllers
             
             string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "Kitchen.zip"); // avoid overriding
             ObjectsApi objects = new ObjectsApi();
-            return Ok(new { workItemId = "stop at 291" });
             objects.Configuration.AccessToken = oauth.access_token;
             using (StreamReader streamReader = new StreamReader(fileSavePath))
                 await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
@@ -346,6 +345,8 @@ namespace WebKitchenBuilder.Controllers
                     { "onComplete", new XrefTreeArgument { Verb = Verb.Post, Url = callbackUrl } }
                 }
             };
+            return Ok(new { workItemId = "stop at 348" });
+
             WorkItemStatus workItemStatus = await _designAutomation.CreateWorkItemAsync(workItemSpec);
 
             return Ok(new { workItemId = workItemStatus.Id });
