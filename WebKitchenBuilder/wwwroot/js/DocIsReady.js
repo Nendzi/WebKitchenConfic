@@ -7,8 +7,8 @@
     //$('#logInButton').click(loginUser);
     $('#clientID').click(instantLogin);
 
-    // create bundle on click - just for testing purpose. It will be deleted after bug solving
-    $('#createBundle').click(createAppBundle);
+    // create activity on click - just for testing purpose. It will be deleted after bug solving
+    $('#createBundle').click(createActivity);
     //$("#wantedForgeClientID").change(forgeClientChanged);
 
     // From ForgeTree

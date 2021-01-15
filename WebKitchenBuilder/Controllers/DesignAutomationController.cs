@@ -118,7 +118,7 @@ namespace WebKitchenBuilder.Controllers
                 throw new Exception("Appbundle not found at " + packageZipPath);
             }
 
-            // get defined app bundles - but this line is wrong when running on server not localhost.
+            // get defined app bundles - but this line is wrong when running on heroku server instead of localhost.
             Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();            
 
             // check if app bundle is already define
