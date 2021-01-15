@@ -345,8 +345,6 @@ namespace WebKitchenBuilder.Controllers
                     { "onComplete", new XrefTreeArgument { Verb = Verb.Post, Url = callbackUrl } }
                 }
             };
-            return Ok(new { workItemId = "stop at 348" });
-
             WorkItemStatus workItemStatus = await _designAutomation.CreateWorkItemAsync(workItemSpec);
 
             return Ok(new { workItemId = workItemStatus.Id });
