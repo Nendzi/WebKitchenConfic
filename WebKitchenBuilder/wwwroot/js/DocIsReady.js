@@ -8,7 +8,7 @@
     $('#clientID').click(instantLogin);
 
     // create activity on click - just for testing purpose. It will be deleted after bug solving
-    $('#createBundle').click(createActivity);
+    $('#createBundle').click(createAppBundleActivity);
     //$("#wantedForgeClientID").change(forgeClientChanged);
 
     // From ForgeTree

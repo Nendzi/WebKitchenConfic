@@ -19,7 +19,7 @@ namespace WebKitchenBuilder.Controllers
         private static dynamic PublicToken { get; set; }
         //depo for Forge_Client_ID and secret
         internal static string FORGE_CLIENT_ID { get; set; }
-        private static string FORGE_CLIENT_SECRET { get; set; }
+        internal static string FORGE_CLIENT_SECRET { get; set; }
 
         /// <summary>
         /// Get access token with internal (write) scope

@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebKitchenBuilder.Builders;
 using Activity = Autodesk.Forge.DesignAutomation.Model.Activity;
 using Alias = Autodesk.Forge.DesignAutomation.Model.Alias;
 using AppBundle = Autodesk.Forge.DesignAutomation.Model.AppBundle;
@@ -71,7 +72,8 @@ namespace WebKitchenBuilder.Controllers
         // Constructor, where env and hubContext are specified
         public DesignAutomationController(IWebHostEnvironment env, IHubContext<DesignAutomationHub> hubContext, DesignAutomationClient api)
         {
-            _designAutomation = api;
+            DesignAutomationClientBuilder da = new DesignAutomationClientBuilder(OAuthController.FORGE_CLIENT_ID, OAuthController.FORGE_CLIENT_SECRET);
+            _designAutomation = da.Client;
             _env = env;
             _hubContext = hubContext;
         }
@@ -203,7 +205,7 @@ namespace WebKitchenBuilder.Controllers
             try
             {
                 Page<string> activities = await _designAutomation.GetActivitiesAsync();
-
+                
                 string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
                 if (!activities.Data.Contains(qualifiedActivityId))
                 {
