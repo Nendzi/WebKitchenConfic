@@ -110,7 +110,7 @@ namespace WebKitchenBuilder.Controllers
         [HttpPost]
         [Route("api/forge/designautomation/appbundles")]
         public async Task<IActionResult> CreateAppBundle() //([FromBody] JObject appBundleSpecs)
-        {    
+        {
             // check if ZIP with bundle is here
             string packageZipPath = Path.Combine(LocalBundlesFolder, ZipFileName);
             if (!System.IO.File.Exists(packageZipPath))
@@ -119,7 +119,7 @@ namespace WebKitchenBuilder.Controllers
             }
 
             // get defined app bundles - but this line is wrong when running on heroku server instead of localhost.
-            Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();            
+            Page<string> appBundles = await _designAutomation.GetAppBundlesAsync();
 
             // check if app bundle is already define
             dynamic newAppVersion;
@@ -200,21 +200,24 @@ namespace WebKitchenBuilder.Controllers
         [Route("api/forge/designautomation/activities")]
         public async Task<IActionResult> CreateActivity([FromBody] JObject activitySpecs)
         {
-            Page<string> activities = await _designAutomation.GetActivitiesAsync();
-            string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
-            if (!activities.Data.Contains(qualifiedActivityId))
+            try
             {
-                // define the activity
-                // ToDo: parametrize for different engines...
-                dynamic engineAttributes = EngineAttributes(EngineName);
-                string commandLine = string.Format(engineAttributes.commandLine, AppBundleName);
-                Activity activitySpec = new Activity()
+                Page<string> activities = await _designAutomation.GetActivitiesAsync();
+
+                string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
+                if (!activities.Data.Contains(qualifiedActivityId))
                 {
-                    Id = ActivityName,
-                    Appbundles = new List<string>() { string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias) },
-                    CommandLine = new List<string>() { commandLine },
-                    Engine = EngineName,
-                    Parameters = new Dictionary<string, Parameter>()
+                    // define the activity
+                    // ToDo: parametrize for different engines...
+                    dynamic engineAttributes = EngineAttributes(EngineName);
+                    string commandLine = string.Format(engineAttributes.commandLine, AppBundleName);
+                    Activity activitySpec = new Activity()
+                    {
+                        Id = ActivityName,
+                        Appbundles = new List<string>() { string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias) },
+                        CommandLine = new List<string>() { commandLine },
+                        Engine = EngineName,
+                        Parameters = new Dictionary<string, Parameter>()
                     {
                         { "inputFile", new Parameter(){
                             Description = "IAM file to process",
@@ -235,14 +238,19 @@ namespace WebKitchenBuilder.Controllers
                             Zip = true }
                         }
                     }
-                };
-                Activity newActivity = await _designAutomation.CreateActivityAsync(activitySpec);
+                    };
+                    Activity newActivity = await _designAutomation.CreateActivityAsync(activitySpec);
 
-                // specify the alias for this Activity
-                Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
-                Alias newAlias = await _designAutomation.CreateActivityAliasAsync(ActivityName, aliasSpec);
+                    // specify the alias for this Activity
+                    Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
+                    Alias newAlias = await _designAutomation.CreateActivityAliasAsync(ActivityName, aliasSpec);
 
-                return Ok(new { Activity = qualifiedActivityId });
+                    return Ok(new { Activity = qualifiedActivityId });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Activity = ex.Message });
             }
 
             // as this activity points to a AppBundle "dev" alias (which points to the last version of the bundle),
@@ -285,7 +293,7 @@ namespace WebKitchenBuilder.Controllers
 
             // OAuth token
             dynamic oauth = await OAuthController.GetInternalAsync();
-            
+
             string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "Kitchen.zip"); // avoid overriding
             ObjectsApi objects = new ObjectsApi();
             objects.Configuration.AccessToken = oauth.access_token;
