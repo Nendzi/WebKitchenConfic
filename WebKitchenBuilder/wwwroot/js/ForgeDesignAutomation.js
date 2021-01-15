@@ -42,7 +42,9 @@ function prepareBucket() {
             writeLog('Bucket kitchenconfig is created');
             //$('#appBuckets').jstree(true).refresh();
             prepareAppBucketTree();
-            createAppBundleActivity();
+            //createAppBundleActivity();
+            // I just want to run this command out of startConnection function
+            createAppBundle();
         }
     });
 }
