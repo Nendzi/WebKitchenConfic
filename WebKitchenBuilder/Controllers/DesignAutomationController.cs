@@ -344,8 +344,8 @@ namespace WebKitchenBuilder.Controllers
             // the callback contains the connectionId (used to identify the client) and the outputFileName of this workitem
             string callbackUrl = string.Format(
                 "{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}",
-                OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),
-                /*"https://webkitchenbuilder.herokuapp.com",*/
+                /* OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),*/
+                "https://webkitchenbuilder.herokuapp.com",
                 browerConnectionId,
                 outputFileNameOSS
                 );
