@@ -133,7 +133,6 @@ function startWorkitem() {
 }
 
 function swapBoardToViewer() {
-    $('#appBuckets').jstree(true).refresh();
     $("#forgeViewerVisibility").css("display", "initial");
     $("#outputWindowVisibility").css("display", "none");
 }
@@ -166,13 +165,13 @@ function startConnection(onReady) {
         });
 
     connection.on("downloadResult", function (url) {
-        writeLog('<a href="' + url + '">Download result file here</a>');
+        document.getElementById('responseMessage').innerHTML = '<a href="' + url + '">Download result file here</a>';
     });
 
     connection.on("onComplete", function (message) {
-        writeLog(message);
+        writeLog('Work item is succesully finished. You can select your model to translate it in 3D model or download.');
         $('#appBuckets').jstree(true).refresh();
-        $("#forgeViewerVisibility").css("display", "initial");
-        $("#outputWindowVisibility").css("display", "none");
+        //$("#forgeViewerVisibility").css("display", "initial");
+        //$("#outputWindowVisibility").css("display", "none");
     });
 }
