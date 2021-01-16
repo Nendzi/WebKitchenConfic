@@ -9,7 +9,7 @@
 
     // create activity on click - just for testing purpose. It will be deleted after bug solving
     $('#createBundle').click(createAppBundleActivity);
-    //$("#wantedForgeClientID").change(forgeClientChanged);
+    $('#createBundle').css("display", "none");
 
     // From ForgeTree
     //prepareAppBucketTree(); za sada isključujem ali je pozivam nakon logovanja

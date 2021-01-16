@@ -16,7 +16,21 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-function prepareLists() {
+function prepareInstructions() {
+    writeLog('Application is ready for creating kitchen element');
+    writeLog('On left site under Element configurator input width and Heigth for desired element');
+    writeLog('Do not use element width under 300mm');
+    writeLog('Choose one of possible types for front type');
+    writeLog('Closed - is fixed panel without handle.');
+    writeLog('Open - is space without any element, reserved for eg. oven');
+    writeLog('Drawer - Moveable element with handle in the middle. After creating you can click on drawer front to open it. Click again to close it');
+    writeLog('Double door - two moveable element which are able to be opened/closed separatly by clicking after creating');
+    writeLog('Left door - one moveable element which is able to be opened/closed separatly on left side by clicking after creating');
+    writeLog('Right door - one moveable element which is able to be opened/closed separatly on right side by clicking after creating');
+    writeLog('Cassette - one moveable element which is able to be opened/closed separatly on down side by clicking after creating');
+    writeLog('Input heigth in percentage of total kitchen element. Do not place % at the end of value');
+    writeLog('Click on Add new to open new row for new front type.')
+    writeLog('When you reach 100% then button Submit will be enabled and you can send created date to Forge on procceed');
 }
 
 function clearAccount() {
@@ -42,7 +56,7 @@ function prepareBucket() {
             writeLog('Bucket kitchenconfig is created');
             //$('#appBuckets').jstree(true).refresh();
             prepareAppBucketTree();
-            //createAppBundleActivity();            
+            createAppBundleActivity();            
         }
     });
 }
@@ -52,7 +66,8 @@ function createAppBundleActivity() {
         writeLog("Defining appbundle and activity for " + "Autodesk.Inventor+2021");
         createAppBundle(function () {
             createActivity(function () {
-                prepareLists();
+                document.getElementById('outputWindow').innerHTML = '';
+                prepareInstructions();
             })
         });
     });

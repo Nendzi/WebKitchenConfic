@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
     <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
     <!-- this project files -->
-    <link href="css/main.css" rel="stylesheet" />
+    <link href="/css/main.css" rel="stylesheet" />
     <!-- JavaScript files for this project -->
     <script src="/js/sidemenu.js"></script>
     <script src="/js/script3.js"></script>
@@ -43,91 +43,26 @@
                     <div class="instantForgeLogIn">
                         <input type="text" class="navTextArea" id="forgeClientID" placeholder="Input your Forge client ID" />
                         <input type="password" class="navTextArea" id="forgeClientSecret" placeholder="Input your Forge client secret" />
-                        <button type="button" class="buttonsForRegistration genButton" id="createBundle" style="margin: 28px auto">Create Bundle</button>
-                        <button type="button" class="buttonsForRegistration genButton" id="clientID" style="margin: 28px auto">Log in</button>
+                        <button type="button" class="buttonsForRegistration genButton" id="createBundle" >Create Bundle and activity</button>
+                        <button type="button" class="buttonsForRegistration genButton" id="clientID" >Log in</button>
                     </div>
                 </li>
             </ul>
-            <!--Ovo je za registraciju korisnika kroz bazu i to će biti u naknadnoj verziji
-            <div class="registrationButtons">
-                <button type="button" class="buttonsForRegistration genButton" id="clientID" onclick="openNavLogin()">Log in</button>
-                <button type="button" class="buttonsForRegistration genButton" id="clientSecret" onclick="openNavSignin()">Sign in</button>
-                <span id="logedUserName"></span>
-                </div>-->
         </div>
-        <!--OVO JE MENJANO-->
     </nav>
-    <!-- Odavde se ignoriše u ovoj probnoj verziji
-    <div id="mySidenavSignin" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNavSignin()">&times;</a>
-        <div id="signInForm">
-            <ul>
-                <li>User email</li>
-                <li>
-                    <input type="text" class="navTextArea" id="userEmailAddress" placeholder="Input your user name" />
-                </li>
-                <li>Password</li>
-                <li>
-                    <input type="password" class="navTextArea" id="userPassword" placeholder="Input your password" />
-                </li>
-                <li>Conform password</li>
-                <li>
-                    <input type="password" class="navTextArea" id="userConformedPassword" placeholder="Confirm your password" />
-                </li>
-                <li>Forge Client ID</li>
-                <li>
-                    <input type="text" class="navTextArea" id="forgeClientID" placeholder="Input your Forge client ID" />
-                </li>
-                <li>Forge Client Secret</li>
-                <li>
-                    <input type="password" class="navTextArea" id="forgeClientSecret" placeholder="Input your Forge client secret" />
-                </li>
-            </ul>
-            <div class="flexConteinerBtn">
-                <button type="submit" id="subButton" class="buttonsForRegistration genButton">Submit</button>
-            </div>
-            <p id="addingNewUserInfo"></p>
-        </div>
-
-    </div>
-    <div id="mySidenavLogin" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNavLogin()">&times;</a>
-        <div id="loginForm">
-            <div>
-                <ul class="loginList">
-                    <li>User email</li>
-                    <li>
-                        <input type="text" class="navTextArea" id="loginEmailAddress" placeholder="Input your email address" />
-                    </li>
-                    <li>Password</li>
-                    <li>
-                        <input type="password" class="navTextArea" id="loginPassword" placeholder="Input your password" />
-                    </li>
-                </ul>
-            </div>
-            <div class="flexConteinerBtn">
-                <button type="submit" id="logInButton" class="buttonsForRegistration genButton">Log in</button>
-            </div>
-            <p id="loginInfo"></p>
-            <div id="forgeIDsList">
-                <select name="listOfForgeClientIDs" id="wantedForgeClientID">
-                    <option>Select Forge client ID</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    DOVDE JE MENJANO -->
     <!-- End of navbar -->
     <div class="container-fluid fill">
         <div class="row fill">
             <div class="col-sm-3 fill">
                 <div class="panel panel-default fill">
-                    <div class="panel-heading" data-toggle="tooltip">
-                        Buckets &amp; Objects
-                        <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
-                    </div>
-                    <div id="appBuckets">
-                        You need to input your Forge Client ID and Forge Client Secret. Please visit <a href="https://forge.autodesk.com/" target="_blank">Autodesk Forge</a> for more information.
+                    <div class="grupa">
+                        <div class="panel-heading naziv" data-toggle="tooltip">
+                            Buckets &amp; Objects
+                            <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
+                        </div>
+                        <div id="appBuckets">
+                            You need to input your Forge Client ID and Forge Client Secret. Please visit <a href="https://forge.autodesk.com/" target="_blank">Autodesk Forge</a> for more information.
+                        </div>
                     </div>
                     <div id="selektor">
                         <!--Ivanin kod ne krivite mene-->
@@ -198,6 +133,6 @@
 
         </div>
     </div>
-    <script src="js/DocIsReady.js"></script>
+    <script src="/js/DocIsReady.js"></script>
 </body>
 </html>

@@ -145,9 +145,19 @@ namespace WebKitchenBuilder.Controllers
                 // create alias pointing to v1
                 Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
                 Alias newAlias = await _designAutomation.CreateAppBundleAliasAsync(AppBundleName, aliasSpec);
+
+                // upload the zip with .bundle
+                RestClient uploadClient = new RestClient(newAppVersion.UploadParameters.EndpointURL);
+                RestRequest request = new RestRequest(string.Empty, Method.POST);
+                request.AlwaysMultipartFormData = true;
+                foreach (KeyValuePair<string, string> x in newAppVersion.UploadParameters.FormData) request.AddParameter(x.Key, x.Value);
+                request.AddFile("file", packageZipPath);
+                request.AddHeader("Cache-Control", "no-cache");
+                await uploadClient.ExecuteTaskAsync(request);
             }
-            else
+            /* else
             {
+                
                 // create new version
                 AppBundle appBundleSpec = new AppBundle()
                 {
@@ -177,7 +187,8 @@ namespace WebKitchenBuilder.Controllers
             request.AddHeader("Cache-Control", "no-cache");
             await uploadClient.ExecuteTaskAsync(request);
 
-            return Ok(new { AppBundle = qualifiedAppBundleId, Version = newAppVersion.Version });
+            return Ok(new { AppBundle = qualifiedAppBundleId, Version = newAppVersion.Version });*/
+            return Ok(new { AppBundle = qualifiedAppBundleId, Version = "1" });
         }
 
         /// <summary>
@@ -202,24 +213,23 @@ namespace WebKitchenBuilder.Controllers
         [Route("api/forge/designautomation/activities")]
         public async Task<IActionResult> CreateActivity([FromBody] JObject activitySpecs)
         {
-            try
+
+            Page<string> activities = await _designAutomation.GetActivitiesAsync();
+
+            string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
+            if (!activities.Data.Contains(qualifiedActivityId))
             {
-                Page<string> activities = await _designAutomation.GetActivitiesAsync();
-                
-                string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
-                if (!activities.Data.Contains(qualifiedActivityId))
+                // define the activity
+                // ToDo: parametrize for different engines...
+                dynamic engineAttributes = EngineAttributes(EngineName);
+                string commandLine = string.Format(engineAttributes.commandLine, AppBundleName);
+                Activity activitySpec = new Activity()
                 {
-                    // define the activity
-                    // ToDo: parametrize for different engines...
-                    dynamic engineAttributes = EngineAttributes(EngineName);
-                    string commandLine = string.Format(engineAttributes.commandLine, AppBundleName);
-                    Activity activitySpec = new Activity()
-                    {
-                        Id = ActivityName,
-                        Appbundles = new List<string>() { string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias) },
-                        CommandLine = new List<string>() { commandLine },
-                        Engine = EngineName,
-                        Parameters = new Dictionary<string, Parameter>()
+                    Id = ActivityName,
+                    Appbundles = new List<string>() { string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias) },
+                    CommandLine = new List<string>() { commandLine },
+                    Engine = EngineName,
+                    Parameters = new Dictionary<string, Parameter>()
                     {
                         { "inputFile", new Parameter(){
                             Description = "IAM file to process",
@@ -240,19 +250,14 @@ namespace WebKitchenBuilder.Controllers
                             Zip = true }
                         }
                     }
-                    };
-                    Activity newActivity = await _designAutomation.CreateActivityAsync(activitySpec);
+                };
+                Activity newActivity = await _designAutomation.CreateActivityAsync(activitySpec);
 
-                    // specify the alias for this Activity
-                    Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
-                    Alias newAlias = await _designAutomation.CreateActivityAliasAsync(ActivityName, aliasSpec);
+                // specify the alias for this Activity
+                Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
+                Alias newAlias = await _designAutomation.CreateActivityAliasAsync(ActivityName, aliasSpec);
 
-                    return Ok(new { Activity = qualifiedActivityId });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Ok(new { Activity = ex.Message });
+                return Ok(new { Activity = qualifiedActivityId });
             }
 
             // as this activity points to a AppBundle "dev" alias (which points to the last version of the bundle),
@@ -341,7 +346,7 @@ namespace WebKitchenBuilder.Controllers
                 "{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}",
                 /*OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),
                 "http://nedeljko-001-site1.etempurl.com", */
-                "https://webkitchenbuilder.herokuapp.com/",
+                "https://webkitchenbuilder.herokuapp.com",
                 browerConnectionId, outputFileNameOSS
                 );
             WorkItem workItemSpec = new WorkItem()

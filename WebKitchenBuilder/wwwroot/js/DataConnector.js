@@ -108,7 +108,7 @@ function sendCred(input) {
         }),
         success: function () {
             $("#forgeViewerVisibility").css("display", "none");
-            $("#outputWindowVisibility").css("display", "initial");
+            $("#outputWindowVisibility").css("display", "initial");            
             prepareBucket();
             //prepareAppBucketTree();
             //createAppBundleActivity();
