@@ -344,9 +344,10 @@ namespace WebKitchenBuilder.Controllers
             // the callback contains the connectionId (used to identify the client) and the outputFileName of this workitem
             string callbackUrl = string.Format(
                 "{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}",
-                /*OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),*/
-                "https://webkitchenbuilder.herokuapp.com",
-                browerConnectionId, outputFileNameOSS
+                OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),
+                /*"https://webkitchenbuilder.herokuapp.com",*/
+                browerConnectionId,
+                outputFileNameOSS
                 );
             WorkItem workItemSpec = new WorkItem()
             {
@@ -359,9 +360,16 @@ namespace WebKitchenBuilder.Controllers
                     { "onComplete", new XrefTreeArgument { Verb = Verb.Post, Url = callbackUrl } }
                 }
             };
-            WorkItemStatus workItemStatus = await _designAutomation.CreateWorkItemAsync(workItemSpec);
 
-            return Ok(new { workItemId = workItemStatus.Id });
+            try
+            {
+                WorkItemStatus workItemStatus = await _designAutomation.CreateWorkItemAsync(workItemSpec);
+                return Ok(new { workItemId = workItemStatus.Id });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { workItemId = ex.Message });
+            }            
         }
 
         /// <summary>
@@ -386,13 +394,13 @@ namespace WebKitchenBuilder.Controllers
                 JObject bodyJson = JObject.Parse((string)body.ToString());
                 await _hubContext.Clients.Client(id).SendAsync("onComplete", bodyJson.ToString());
 
-                var client = new RestClient(bodyJson["reportUrl"].Value<string>());
+                /*var client = new RestClient(bodyJson["reportUrl"].Value<string>());
                 var request = new RestRequest(string.Empty);
 
                 // send the result output log to the client
                 byte[] bs = client.DownloadData(request);
                 string report = System.Text.Encoding.Default.GetString(bs);
-                await _hubContext.Clients.Client(id).SendAsync("onComplete", report);
+                await _hubContext.Clients.Client(id).SendAsync("onComplete", report);*/
 
                 // generate a signed URL to download the result file and send to the client
                 ObjectsApi objectsApi = new ObjectsApi();

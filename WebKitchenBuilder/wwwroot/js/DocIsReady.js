@@ -3,8 +3,6 @@
     document.getElementById("nova").addEventListener("click", dodajGrupu);
 
     // From DataConnector
-    //$('#subButton').click(addNewUser);
-    //$('#logInButton').click(loginUser);
     $('#clientID').click(instantLogin);
 
     // create activity on click - just for testing purpose. It will be deleted after bug solving

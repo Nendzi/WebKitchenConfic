@@ -112,10 +112,14 @@ function startWorkitem() {
     $("#outputWindowVisibility").css("display", "initial");
     document.getElementById('outputWindow').innerHTML = '';
     writeLog("Starting Workitem");
+    writeLogWithId('Uploading input file...');
+    var myTimer = setInterval(function () {
+        var elem = document.getElementById('uploadProgress');
+        elem.innerText = elem.innerText + '>';
+    }, 500);
     startConnection(function () {
         var formData = new FormData();
-        formData.append('data', collectKitchenStructure());
-        writeLog('Uploading input file...');
+        formData.append('data', collectKitchenStructure());        
         $.ajax({
             url: 'api/forge/designautomation/workitems',
             data: formData,
@@ -123,13 +127,16 @@ function startWorkitem() {
             contentType: false,
             type: 'POST',
             success: function (res) {
+                clearInterval(myTimer);
                 writeLog('Workitem started: ' + res.workItemId);
+                $("#outputWindowVisibility").css("cursor", "progress");
             },
             error: function (err) {
+                clearInterval(myTimer);
                 writeLog('Error has happend: ' + err);
             }
         });
-    }, function (msg) { swapBoardToViewer(); });
+    });
 }
 
 function swapBoardToViewer() {
@@ -138,10 +145,14 @@ function swapBoardToViewer() {
 }
 
 function writeLog(text) {
-    console.log(text);
     $('#outputWindow').append('<p style="border-top: 1px dashed #C0C0C0">' + text + '</p>');
     var elem = document.getElementById('outputWindow');
     elem.scrollTop = elem.scrollHeight;
+}
+
+function writeLogWithId(text) {
+    $('#outputWindow').append('<p id="uploadProgress" style="border-top: 1px dashed #C0C0C0">' + text + '</p>');
+
 }
 
 var connection;
@@ -169,9 +180,8 @@ function startConnection(onReady) {
     });
 
     connection.on("onComplete", function (message) {
+        $("#outputWindowVisibility").css("cursor", "auto");
         writeLog('Work item is succesully finished. You can select your model to translate it in 3D model or download.');
         $('#appBuckets').jstree(true).refresh();
-        //$("#forgeViewerVisibility").css("display", "initial");
-        //$("#outputWindowVisibility").css("display", "none");
     });
 }
