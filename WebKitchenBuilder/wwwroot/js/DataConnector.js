@@ -1,4 +1,4 @@
-﻿function addNewUser() {    
+﻿function addNewUser() {
     writeLog("Adding new user");
     var pass1 = document.getElementById("userPassword");
     var pass2 = document.getElementById("userConformedPassword");
@@ -72,7 +72,7 @@ function loginUser() {
             res.forEach(function (user) {
                 listOfForgeClients += '<option>' + user.forgeClient + '</option>';
             });
-            document.getElementById("wantedForgeClientID").innerHTML = listOfForgeClients;            
+            document.getElementById("wantedForgeClientID").innerHTML = listOfForgeClients;
         },
         error: function () {
             document.getElementById("loginInfo").innerHTML = 'Login went wrong.';
@@ -108,16 +108,15 @@ function sendCred(input) {
         }),
         success: function () {
             $("#forgeViewerVisibility").css("display", "none");
-            $("#outputWindowVisibility").css("display", "initial");            
+            $("#outputWindowVisibility").css("display", "initial");
             prepareBucket();
-            //prepareAppBucketTree();
-            //createAppBundleActivity();
         }
-    });    
+    });
 }
 
 function instantLogin() {
     selectedCred.forgeClient = document.getElementById("forgeClientID").value;
     selectedCred.forgeSecret = document.getElementById("forgeClientSecret").value;
     sendCred(selectedCred);
+
 }
