@@ -53,7 +53,7 @@ namespace WebKitchenBuilder.Controllers
         public string LocalBundlesFolder { get { return Path.Combine(_env.WebRootPath, "bundles"); } }
         public string LocalDataSetFolder { get { return Path.Combine(_env.WebRootPath, "InputFiles"); } }
         // Engine
-        public string EngineName { get { return "Autodesk.Inventor+2021"; } }
+        public string EngineName { get { return "Autodesk.Inventor+2022"; } }
         // Bundle file
         public string ZipFileName { get { return "KitchenConfig.bundle.zip"; } }
         // Bundle name
